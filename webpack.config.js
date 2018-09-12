@@ -1,10 +1,13 @@
 const path = require('path');
 
 module.exports = {
+  mode: 'development',
   entry: './src/index.js',
   output: {
     filename: 'embed.js',
-    path: path.resolve(__dirname, 'dist')
+    path: path.resolve(__dirname, 'dist'),
+    library: 'studio',
+    libraryTarget: 'var'
   },
   module: {
     rules: [
@@ -14,7 +17,11 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env']
+            presets: ['@babel/preset-env'],
+            plugins: [
+                "transform-class-properties",
+                "add-module-exports"
+            ]
           }
         }
       }

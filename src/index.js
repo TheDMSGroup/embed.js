@@ -1,2 +1,3 @@
-import Formio from 'formiojs';
+import embed from './Embed';
 
+export { embed };
