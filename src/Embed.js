@@ -15,12 +15,19 @@ class Embed
     constructor(config)
     {
         this.form = new Form(config);
+        this.createEmbedElement(config.element);
     }
 
-    // embed(config)
-    // {
-    //     console.log(config);
-    //     this.form = new Form(config.targetId);
-    // }
+    /**
+     * Create the embed element where we will inject our Formio instance
+     * @param scriptElement
+     */
+    createEmbedElement(scriptElement)
+    {
+        let element = document.createElement('div');
+        element.id = 'studio';
+        scriptElement.parentNode.insertBefore(element, scriptElement.nextSibling);
+
+    }
 }
 export default Embed;

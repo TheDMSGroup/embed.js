@@ -16,6 +16,9 @@ class Form {
         this.getFormJson();
     }
 
+    /**
+     * Query the studio API to retrieve the JSON of the form that is linked to the target
+     */
     getFormJson()
     {
         let url = this.form.config.url + '/api/v1/embed/target/' + this.form.config.account + '/' + this.form.config.targetId;
@@ -31,11 +34,18 @@ class Form {
         .then((response) => this.embedForm(response));
     }
 
+    /**
+     * Set the URL of the page that the form is being loaded on
+     */
     setUrl()
     {
         this.form.config.pageURL = window.location.href;
     }
 
+    /**
+     * Embed the form on the actual page
+     * @param formJson
+     */
     embedForm(formJson)
     {
         this.form.instance = new Formio.Form(document.getElementById('studio'), formJson);
