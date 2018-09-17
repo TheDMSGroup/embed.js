@@ -1,4 +1,5 @@
 import * as Formio from 'formiojs';
+import URL from 'query-string';
 
 class Form {
     /**
@@ -7,7 +8,8 @@ class Form {
      */
     form = {
         instance: {},
-        config: {}
+        config: {},
+        payload: {},
     };
 
     constructor(config) {
@@ -24,14 +26,17 @@ class Form {
         let url = this.form.config.url + '/api/v1/embed/target/' + this.form.config.account + '/' + this.form.config.targetId;
         fetch(url, {
             method: 'POST',
-            body: JSON.stringify(this.form.config),
+            body: JSON.stringify(this.form.payload),
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'text/plain; charset=utf-8'
             }
         })
         .then((response) => response.json())
         .catch(error => console.error('Error:', error))
-        .then((response) => this.embedForm(response));
+        .then((json) => {
+            this.embedForm(json);
+            this.setAuthToken(json.token);
+        });
     }
 
     /**
@@ -39,7 +44,12 @@ class Form {
      */
     setUrl()
     {
-        this.form.config.pageURL = window.location.href;
+        this.form.payload.pageURL = location.href;
+    }
+
+    setAuthToken(token)
+    {
+        this.form.payload['X-Authorization'] = token;
     }
 
     /**
@@ -49,7 +59,26 @@ class Form {
     embedForm(formJson)
     {
         this.form.instance = new Formio.Form(document.getElementById('studio'), formJson);
-        this.form.instance.render();
+        this.form.instance.render()
+            .then((form) => {
+                form.on('nextPage', (payload) => this.submitLead(payload));
+                form.on('render', this.submitLead(URL.parse(location.search)));
+            });
+    }
+
+    submitLead(payload)
+    {
+        console.log(this.form.instance);
+        let url = this.form.config.url + '/api/v1/embed/target/' + this.form.config.account + '/' + this.form.config.targetId;
+        fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(Object.assign(payload, this.form.payload)),
+            headers: {
+                'Content-Type': 'text/plain; charset=utf-8'
+            }
+        })
+        .then((response) => response.json())
+        .catch(error => console.error('Error:', error))
     }
 }
 export default Form;

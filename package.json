@@ -5,7 +5,8 @@
   "main": "dist/embed.js",
   "dependencies": {
     "bootstrap": "^3.3.7",
-    "formiojs": "^3.5.1"
+    "formiojs": "^3.5.1",
+    "query-string": "^5.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
