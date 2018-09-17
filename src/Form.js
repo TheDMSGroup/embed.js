@@ -65,19 +65,16 @@ class Form {
         this.form.instance
         .render()
         .then((form) => {
+            this.submitLeadDataOnEmbed(form);
+
             form.on('nextPage', (payload) => {
-                Component.analytics(form).setPageProgressionEvent(payload.submission.data);
+                new Component.analytics(form).pageProgressionEvent();
                 this.submitLeadData(payload.submission.data, this.leadApiEndPoint);
             });
             form.on('submit', (payload) => {
-                Component.analytics(form)
-                    .setFormCompletionEvent(payload.submission.data);
+                new Component.analytics(form).formCompletionEvent();
                 this.submitLeadData(payload.submission.data, this.leadApiEndPoint);
             });
-            // form.on('render', () => {
-            //     const urlParams = URL.parse(location.search);
-            //     this.submitLeadData(urlParams, this.embedApiEndPoint);
-            // });
         });
     }
 
@@ -89,6 +86,18 @@ class Form {
     get leadApiEndPoint()
     {
         return this.form.config.url + '/api/v1/lead/' + this.form.config.account;
+    }
+
+    /**
+     * Parse the URL params and submit those params on form embed
+     * @param form
+     */
+    submitLeadDataOnEmbed(form)
+    {
+        const urlParams = URL.parse(location.search);
+        const payload = Object.assign(form.data, urlParams);
+
+        this.submitLeadData(payload, this.embedApiEndPoint);
     }
 
     /**

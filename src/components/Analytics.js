@@ -12,18 +12,25 @@ export default class Analytics
      */
     totalPages = 0;
 
+    /**
+     * This object holds all the lead data that gets
+     * submitted to the studio API.
+     * @type {Object}
+     */
+    leadData = {};
+
     constructor(form)
     {
         this.page = form.page;
         this.totalPages = form.pages.length;
+        this.leadData = form.data;
     }
 
     /**
-     * The event that gets fired on form progression.
-     * @param payload
-     * @returns {Object}
+     * Append the event data into the lead data object on page progression
+     * @returns {Object & {eventType: string, eventLabel: string, eventAction: string, eventCompleted: boolean}}
      */
-    setPageProgressionEvent(payload)
+    pageProgressionEvent()
     {
         const event =  {
             eventType: 'page_progression',
@@ -32,10 +39,14 @@ export default class Analytics
             eventCompleted: false
         };
 
-        return Object.assign(payload, event);
+        return Object.assign(this.leadData, event);
     }
 
-    setFormCompletionEvent(payload)
+    /**
+     * Append the event data into the lead data object on form completion
+     * @returns {Object & {eventType: string, eventLabel: string, eventAction: string, eventCompleted: boolean}}
+     */
+    formCompletionEvent()
     {
         const event = {
             eventType: 'form_completed',
@@ -44,7 +55,7 @@ export default class Analytics
             eventCompleted: true
         };
 
-        return Object.assign(payload, event);
+        return Object.assign(this.leadData, event);
     }
 
     /**
