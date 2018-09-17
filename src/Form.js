@@ -1,5 +1,6 @@
 import * as Formio from 'formiojs';
 import URL from 'query-string';
+import Component from './components';
 
 class Form {
     /**
@@ -11,6 +12,8 @@ class Form {
         config: {},
         payload: {},
     };
+
+    authToken = '';
 
     constructor(config) {
         this.form.config = config;
@@ -34,8 +37,8 @@ class Form {
         .then((response) => response.json())
         .catch(error => console.error('Error:', error))
         .then((json) => {
-            this.embedForm(json);
             this.setAuthToken(json.token);
+            this.embedForm(json);
         });
     }
 
@@ -49,7 +52,7 @@ class Form {
 
     setAuthToken(token)
     {
-        this.form.payload['X-Authorization'] = token;
+        this.authToken = token;
     }
 
     /**
@@ -59,25 +62,50 @@ class Form {
     embedForm(formJson)
     {
         this.form.instance = new Formio.Form(document.getElementById('studio'), formJson);
-        this.form.instance.render()
-            .then((form) => {
-                form.on('nextPage', (payload) => this.submitLead(payload));
-                form.on('render', this.submitLead(URL.parse(location.search)));
+        this.form.instance
+        .render()
+        .then((form) => {
+            form.on('nextPage', (payload) => {
+                Component.analytics(form).setPageProgressionEvent(payload.submission.data);
+                this.submitLeadData(payload.submission.data, this.leadApiEndPoint);
             });
+            form.on('submit', (payload) => {
+                Component.analytics(form)
+                    .setFormCompletionEvent(payload.submission.data);
+                this.submitLeadData(payload.submission.data, this.leadApiEndPoint);
+            });
+            // form.on('render', () => {
+            //     const urlParams = URL.parse(location.search);
+            //     this.submitLeadData(urlParams, this.embedApiEndPoint);
+            // });
+        });
     }
 
-    submitLead(payload)
+    get embedApiEndPoint()
     {
-        console.log(this.form.instance);
-        let url = this.form.config.url + '/api/v1/embed/target/' + this.form.config.account + '/' + this.form.config.targetId;
-        fetch(url, {
+        return this.form.config.url + '/api/v1/embed/target/' + this.form.config.account + '/' + this.form.config.targetId;
+    }
+
+    get leadApiEndPoint()
+    {
+        return this.form.config.url + '/api/v1/lead/' + this.form.config.account;
+    }
+
+    /**
+     *
+     * @param parameters Lead data payload
+     * @param path Path of the API endpoint to submit lead data to
+     */
+    submitLeadData(parameters, path)
+    {
+        fetch(path, {
             method: 'POST',
-            body: JSON.stringify(Object.assign(payload, this.form.payload)),
+            body: JSON.stringify(Object.assign(parameters, this.form.payload)),
             headers: {
-                'Content-Type': 'text/plain; charset=utf-8'
+                'Content-Type': 'text/plain; charset=utf-8',
+                'X-Authorization': this.authToken
             }
         })
-        .then((response) => response.json())
         .catch(error => console.error('Error:', error))
     }
 }
