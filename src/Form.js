@@ -13,8 +13,6 @@ class Form {
         payload: {},
     };
 
-    authToken = '';
-
     constructor(config) {
         this.form.config = config;
         this.setUrl();
@@ -26,8 +24,7 @@ class Form {
      */
     getFormJson()
     {
-        let url = this.form.config.url + '/api/v1/embed/target/' + this.form.config.account + '/' + this.form.config.targetId;
-        fetch(url, {
+        fetch(this.embedApiEndPoint, {
             method: 'POST',
             body: JSON.stringify(this.form.payload),
             headers: {
@@ -52,7 +49,7 @@ class Form {
 
     setAuthToken(token)
     {
-        this.authToken = token;
+        this.form.payload['X-Authorization'] = token;
     }
 
     /**
@@ -88,6 +85,11 @@ class Form {
         return this.form.config.url + '/api/v1/lead/' + this.form.config.account;
     }
 
+    get xverifyApiEndpoint()
+    {
+        return this.form.config.url + '/api/v1/lead/xverify/' + this.form.config.account;
+    }
+
     /**
      * Parse the URL params and submit those params on form embed
      * @param form
@@ -111,8 +113,7 @@ class Form {
             method: 'POST',
             body: JSON.stringify(Object.assign(parameters, this.form.payload)),
             headers: {
-                'Content-Type': 'text/plain; charset=utf-8',
-                'X-Authorization': this.authToken
+                'Content-Type': 'text/plain; charset=utf-8'
             }
         })
         .catch(error => console.error('Error:', error))
