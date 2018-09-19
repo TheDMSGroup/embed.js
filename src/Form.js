@@ -77,10 +77,12 @@ class Form {
                 if (this.isNotLastPage(form)) {
                     new Component.analytics(form).pageProgressionEvent();
                     this.incrementPage(form);
+                    this.submitLeadData(payload.data, this.leadApiEndPoint);
                 } else {
                     new Component.analytics(form).formCompletionEvent();
+                    this.submitLeadData(payload.data, this.leadApiEndPoint)
+                    .then((response) => location.href = response.redirect_url);
                 }
-                this.submitLeadData(payload.data, this.leadApiEndPoint)
             });
             form.on('submitButton', () => {
                 if (this.isNotLastPage(form)) {
@@ -133,13 +135,14 @@ class Form {
      */
     submitLeadData(parameters, path)
     {
-        fetch(path, {
+        return fetch(path, {
             method: 'POST',
             body: JSON.stringify(Object.assign(parameters, this.form.payload)),
             headers: {
                 'Content-Type': 'text/plain; charset=utf-8'
             }
         })
+        .then((response) => response.json())
         .catch(error => console.error('Error:', error))
     }
 }
