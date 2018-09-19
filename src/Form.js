@@ -24,6 +24,7 @@ class Form {
      */
     getFormJson()
     {
+        this.setUrlParams();
         fetch(this.embedApiEndPoint, {
             method: 'POST',
             body: JSON.stringify(this.form.payload),
@@ -35,6 +36,7 @@ class Form {
         .catch(error => console.error('Error:', error))
         .then((json) => {
             this.setAuthToken(json.token);
+            this.setFormId(json.formId);
             this.embedForm(json);
         });
     }
@@ -52,27 +54,52 @@ class Form {
         this.form.payload['X-Authorization'] = token;
     }
 
+    setFormId(formId)
+    {
+        this.form.payload['form_id'] = formId;
+    }
+
     /**
      * Embed the form on the actual page
      * @param formJson
      */
     embedForm(formJson)
     {
-        this.form.instance = new Formio.Form(document.getElementById('studio'), formJson);
+        this.form.instance = new Formio.Form(document.getElementById('studio'), formJson, {
+            submitOnEnter: true,
+            breadcrumbSettings: { clickable: false },
+            buttonSettings: { showCancel: false, showPrevious: false, showNext: false }
+        });
         this.form.instance
         .render()
         .then((form) => {
-            this.submitLeadDataOnEmbed(form);
-
-            form.on('nextPage', (payload) => {
-                new Component.analytics(form).pageProgressionEvent();
-                this.submitLeadData(payload.submission.data, this.leadApiEndPoint);
-            });
             form.on('submit', (payload) => {
-                new Component.analytics(form).formCompletionEvent();
-                this.submitLeadData(payload.submission.data, this.leadApiEndPoint);
+                if (this.isNotLastPage(form)) {
+                    new Component.analytics(form).pageProgressionEvent();
+                    this.incrementPage(form);
+                } else {
+                    new Component.analytics(form).formCompletionEvent();
+                }
+                this.submitLeadData(payload.data, this.leadApiEndPoint)
+            });
+            form.on('submitButton', () => {
+                if (this.isNotLastPage(form)) {
+                    form.nextPage();
+                } else {
+                    form.submit();
+                }
             });
         });
+    }
+
+    incrementPage(form)
+    {
+        form.page = form.page + 1;
+    }
+
+    isNotLastPage(form)
+    {
+        return form.page !== form.pages.length;
     }
 
     get embedApiEndPoint()
@@ -91,15 +118,12 @@ class Form {
     }
 
     /**
-     * Parse the URL params and submit those params on form embed
-     * @param form
+     * Parse the URL params and push them into the payload
      */
-    submitLeadDataOnEmbed(form)
+    setUrlParams()
     {
         const urlParams = URL.parse(location.search);
-        const payload = Object.assign(form.data, urlParams);
-
-        this.submitLeadData(payload, this.embedApiEndPoint);
+        Object.assign(this.form.payload, urlParams);
     }
 
     /**
