@@ -4,7 +4,6 @@ import Component from './components';
 
 class Form {
     /**
-     * The form wrapper
      * @var {Object}
      */
     form = {
@@ -65,10 +64,22 @@ class Form {
      */
     embedForm(formJson)
     {
+        let xverify = new Component.xverify();
+
         this.form.instance = new Formio.Form(document.getElementById('studio'), formJson, {
             submitOnEnter: true,
             breadcrumbSettings: { clickable: false },
-            buttonSettings: { showCancel: false, showPrevious: false, showNext: false }
+            buttonSettings: { showCancel: false, showPrevious: false, showNext: false },
+            hooks: {
+                beforeSubmit: (payload, next) => {
+                    if (xverify.needsToBeValidated(payload.data)) {
+                        xverify.validate(payload.data)
+                            .catch(error => next(error));
+                    } else {
+                        next();
+                    }
+                }
+            }
         });
         this.form.instance
         .render()
@@ -81,7 +92,7 @@ class Form {
                 } else {
                     new Component.analytics(form).formCompletionEvent();
                     this.submitLeadData(payload.data, this.leadApiEndPoint)
-                    .then((response) => location.href = response.redirect_url);
+                    // .then((response) => location.href = response.redirect_url);
                 }
             });
             form.on('submitButton', () => {
@@ -112,11 +123,6 @@ class Form {
     get leadApiEndPoint()
     {
         return this.form.config.url + '/api/v1/lead/' + this.form.config.account;
-    }
-
-    get xverifyApiEndpoint()
-    {
-        return this.form.config.url + '/api/v1/lead/xverify/' + this.form.config.account;
     }
 
     /**
