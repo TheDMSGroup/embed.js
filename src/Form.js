@@ -7,7 +7,7 @@ class Form {
      * @var {Object}
      */
     form = {
-        instance: {},
+        wizard: {},
         config: {},
         payload: {},
     };
@@ -71,7 +71,7 @@ class Form {
     embedForm(formJson)
     {
         let xverify = new Component.xverify(this.form);
-        this.form.instance = new Formio.Form(document.getElementById('studio'), formJson, {
+        this.form.wizard = new Formio.Form(document.getElementById('studio'), formJson, {
             submitOnEnter: true,
             breadcrumbSettings: { clickable: false },
             buttonSettings: { showCancel: false, showPrevious: false, showNext: false },
@@ -79,15 +79,18 @@ class Form {
                 beforeSubmit: (payload, next) => {
                     if (xverify.needsToBeValidated(payload.data)) {
                         xverify.validate(payload.data)
-                        .catch(error => next(error))
-                        .then(() => next());
+                        .then((validated) => {
+                            if (validated) {
+                                next();
+                            }
+                        });
                     } else {
                         next();
                     }
                 }
             }
         });
-        this.form.instance
+        this.form.wizard
         .render()
         .then((form) => {
             form.on('submit', (payload) => {

@@ -1,3 +1,4 @@
+import FormioUtils from "formiojs/utils";
 import forEach from "lodash/foreach";
 
 class Xverify
@@ -29,6 +30,8 @@ class Xverify
             xverifyPayload['phone_cell'] = payload.phone;
         }
 
+        let remapField = { phone_cell: 'phone', email: 'email' };
+
         return fetch(this.xverifyApiEndpoint, {
             method: 'POST',
             body: JSON.stringify(Object.assign(xverifyPayload, this.form.payload)),
@@ -40,11 +43,17 @@ class Xverify
         .then((results) => {
             forEach(results, (fieldResult, fieldKey) => {
                if (!fieldResult.valid) {
-                   throw({
-                       message: fieldResult.message
-                   });
+                   FormioUtils.getComponent(
+                       this.form.wizard.instance.components,
+                       remapField[fieldKey]
+                   )
+                   .setCustomValidity(fieldResult.message, true);
+
+                   throw new Error(fieldResult.message);
                }
             });
+
+            return true;
         })
     }
 }
