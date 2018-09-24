@@ -2,21 +2,15 @@ import FormioUtils from "formiojs/utils";
 
 class Xverify
 {
-
-    constructor(authToken)
+    constructor(form)
     {
-        this._authToken = authToken;
-    }
-
-    set authToken(token) {
-
+        this.form = form;
     }
 
     get xverifyApiEndpoint()
     {
         return this.form.config.url + '/api/v1/lead/xverify/' + this.form.config.account;
     }
-
 
     needsToBeValidated(payload)
     {
@@ -27,7 +21,6 @@ class Xverify
     validate(payload)
     {
         let xverifyPayload = {};
-        let xverifyErrors = [];
 
         if (payload.hasOwnProperty('email') && payload.email !== '') {
             xverifyPayload['email'] = payload.email;
@@ -36,43 +29,14 @@ class Xverify
             xverifyPayload['phone_cell'] = payload.phone;
         }
 
-        return fetch(path, {
+        return fetch(this.xverifyApiEndpoint, {
             method: 'POST',
-            body: JSON.stringify(Object.assign(parameters, this.form.payload)),
+            body: JSON.stringify(Object.assign(xverifyPayload, this.form.payload)),
             headers: {
                 'Content-Type': 'text/plain; charset=utf-8'
             }
         })
-            .then((response) => response.json())
-            .catch(error => console.error('Error:', error))
+        .then((response) => response.json())
+        .catch(error => console.error('Error:', error))
     }
-
-
-
-
-
-        return this.submitLeadData(xverifyPayload, this.xverifyApiEndpoint)
-            .then((results) => {
-                results.forEach((result) => {
-                    if (result.valid === 0) {
-                        console.log(result);
-                    }
-                });
-
-
-                for (let index in response) {
-                    if (response[index].valid === 0) {
-                        let errorComponent = Formio.Utils.getComponent(this.form.instance.instance.wizard.components, index);
-                        xverifyErrors.push({
-                            component: errorComponent,
-                            message: response[index].message.toString()
-                        });
-                    }
-                }
-                if (Object.keys(xverifyErrors).length > 0) {
-                    Promise.reject(xverifyErrors);
-                }
-            });
-    }
-
 }

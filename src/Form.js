@@ -64,7 +64,7 @@ class Form {
      */
     embedForm(formJson)
     {
-        let xverify = new Component.xverify();
+        let xverify = new Component.xverify(this.form);
 
         this.form.instance = new Formio.Form(document.getElementById('studio'), formJson, {
             submitOnEnter: true,
