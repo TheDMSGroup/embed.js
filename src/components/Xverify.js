@@ -1,4 +1,4 @@
-import FormioUtils from "formiojs/utils";
+import forEach from "lodash/foreach";
 
 class Xverify
 {
@@ -37,6 +37,15 @@ class Xverify
             }
         })
         .then((response) => response.json())
-        .catch(error => console.error('Error:', error))
+        .then((results) => {
+            forEach(results, (fieldResult, fieldKey) => {
+               if (!fieldResult.valid) {
+                   throw({
+                       message: fieldResult.message
+                   });
+               }
+            });
+        })
     }
 }
+export default Xverify;

@@ -34,8 +34,9 @@ class Form {
         .then((response) => response.json())
         .catch(error => console.error('Error:', error))
         .then((json) => {
-            this.setAuthToken(json.token);
-            this.setFormId(json.formId);
+            this.authToken = json.token;
+            this.formId = json.formId;
+            this.uuid = json.leadId;
             this.embedForm(json);
         });
     }
@@ -48,14 +49,19 @@ class Form {
         this.form.payload.pageURL = location.href;
     }
 
-    setAuthToken(token)
+    set authToken(token)
     {
         this.form.payload['X-Authorization'] = token;
     }
 
-    setFormId(formId)
+    set formId(formId)
     {
         this.form.payload['form_id'] = formId;
+    }
+
+    set uuid(uuid)
+    {
+        this.form.payload.uuid = uuid;
     }
 
     /**
@@ -65,7 +71,6 @@ class Form {
     embedForm(formJson)
     {
         let xverify = new Component.xverify(this.form);
-
         this.form.instance = new Formio.Form(document.getElementById('studio'), formJson, {
             submitOnEnter: true,
             breadcrumbSettings: { clickable: false },
@@ -74,7 +79,8 @@ class Form {
                 beforeSubmit: (payload, next) => {
                     if (xverify.needsToBeValidated(payload.data)) {
                         xverify.validate(payload.data)
-                            .catch(error => next(error));
+                        .catch(error => next(error))
+                        .then(() => next());
                     } else {
                         next();
                     }
