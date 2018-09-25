@@ -5,7 +5,7 @@
   "main": "dist/embed.js",
   "dependencies": {
     "bootstrap": "^3.3.7",
-    "formiojs": "^3.5.3",
+    "formiojs": "^3.5.7",
     "query-string": "^5.1.1"
   },
   "devDependencies": {
@@ -18,8 +18,8 @@
     "file-loader": "^2.0.0",
     "style-loader": "^0.23.0",
     "url-loader": "^1.1.1",
-    "webpack": "^4.19.1",
-    "webpack-cli": "^3.1.0"
+    "webpack": "^4.20.1",
+    "webpack-cli": "^3.1.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
