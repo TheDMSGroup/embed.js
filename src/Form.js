@@ -37,6 +37,7 @@ class Form {
             this.authToken = json.token;
             this.formId = json.formId;
             this.uuid = json.leadId;
+            this.externalCss = json.inline_css;
             this.embedForm(json);
         });
     }
@@ -62,6 +63,13 @@ class Form {
     set uuid(uuid)
     {
         this.form.payload.uuid = uuid;
+    }
+
+    set externalCss(css)
+    {
+        let style = document.createElement('style');
+        style.innerHTML = css;
+        document.getElementsByTagName('head')[0].appendChild(style);
     }
 
     /**
