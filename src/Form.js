@@ -101,6 +101,8 @@ class Form {
         this.form.wizard
         .render()
         .then((form) => {
+            new Component.trustedForm(form);
+
             form.on('submit', (payload) => {
                 if (this.isNotLastPage(form)) {
                     new Component.analytics(form).pageProgressionEvent();
@@ -119,7 +121,7 @@ class Form {
                     form.submit();
                 }
             });
-        });
+        })
     }
 
     incrementPage(form)
