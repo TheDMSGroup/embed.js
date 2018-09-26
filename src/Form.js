@@ -102,6 +102,7 @@ class Form {
         .render()
         .then((form) => {
             new Component.trustedForm(form);
+            new Component.jornaya(form);
 
             form.on('submit', (payload) => {
                 if (this.isNotLastPage(form)) {
