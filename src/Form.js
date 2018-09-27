@@ -102,15 +102,17 @@ class Form {
         .render()
         .then((form) => {
             new Component.trustedForm(form);
-            new Component.jornaya(form);
-
+            let jornaya = new Component.jornaya(form);
+            jornaya.attachJornayaIdToTCPA();
             form.on('submit', (payload) => {
                 if (this.isNotLastPage(form)) {
                     new Component.analytics(form).pageProgressionEvent();
+                    jornaya.attachJornayaIdToTCPA();
                     this.incrementPage(form);
                     this.submitLeadData(payload.data, this.leadApiEndPoint);
                 } else {
                     new Component.analytics(form).formCompletionEvent();
+                    jornaya.attachJornayaIdToTCPA();
                     this.submitLeadData(payload.data, this.leadApiEndPoint)
                     // .then((response) => location.href = response.redirect_url);
                 }

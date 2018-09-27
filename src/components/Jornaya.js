@@ -1,4 +1,5 @@
 import getScript from 'get-js';
+import forEach from 'lodash/foreach';
 
 class Jornaya
 {
@@ -20,6 +21,16 @@ class Jornaya
         if (token !== 'undefined') {
             this.data['jornaya_leadid'] = token;
         }
+    }
+
+    attachJornayaIdToTCPA()
+    {
+        let allFields = document.getElementsByTagName('input');
+        forEach(allFields, (field) => {
+           if (field.type === 'checkbox' && field.name.includes('phone')) {
+               field.id = 'leadid_tcpa_disclosure';
+           }
+        });
     }
 }
 export default Jornaya;
