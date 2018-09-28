@@ -15,8 +15,12 @@ class Xverify
 
     needsToBeValidated(payload)
     {
-        return payload.hasOwnProperty('email') && payload.email !== ''
-            || payload.hasOwnProperty('phone') && payload.phone !== '';
+        if (
+            payload.hasOwnProperty('phone') && !payload.hasOwnProperty('phone_valid') ||
+            payload.hasOwnProperty('email') && !payload.hasOwnProperty('email_valid')
+        ) {
+            return true;
+        }
     }
 
     validate(payload)
@@ -50,10 +54,10 @@ class Xverify
                    .setCustomValidity(fieldResult.message, true);
 
                    throw new Error(fieldResult.message);
+               } else {
+                   payload[remapField[fieldKey] + '_valid'] = true;
                }
             });
-
-            return true;
         })
     }
 }

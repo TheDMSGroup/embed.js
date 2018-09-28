@@ -87,11 +87,7 @@ class Form {
                 beforeSubmit: (payload, next) => {
                     if (xverify.needsToBeValidated(payload.data)) {
                         xverify.validate(payload.data)
-                        .then((validated) => {
-                            if (validated) {
-                                next();
-                            }
-                        });
+                        .then(() => next());
                     } else {
                         next();
                     }
@@ -104,8 +100,9 @@ class Form {
             new Component.trustedForm(form);
             let jornaya = new Component.jornaya(form);
             jornaya.attachJornayaIdToTCPA();
+
             form.on('submit', (payload) => {
-                if (this.isNotLastPage(form)) {
+                if (!this.isLastPage(form)) {
                     new Component.analytics(form).pageProgressionEvent();
                     jornaya.attachJornayaIdToTCPA();
                     this.incrementPage(form);
@@ -114,17 +111,40 @@ class Form {
                     new Component.analytics(form).formCompletionEvent();
                     jornaya.attachJornayaIdToTCPA();
                     this.submitLeadData(payload.data, this.leadApiEndPoint)
-                    // .then((response) => location.href = response.redirect_url);
+                    .then((response) => location.href = response.redirect_url);
                 }
             });
             form.on('submitButton', () => {
-                if (this.isNotLastPage(form)) {
-                    form.nextPage();
-                } else {
+                if (this.isLastPage(form)) {
                     form.submit();
+                } else {
+                    this.nextPage(form);
                 }
             });
         })
+    }
+
+    /**
+     * Override native form.io nextPage method in order to emit the "submit" event.
+     * @param form
+     * @returns {*}
+     */
+    nextPage(form) {
+        if (form.checkValidity(form.data, true)) {
+            form.checkData(form.data, {
+                noValidate: true
+            });
+            return form.beforeNext().then(() => {
+                form.history.push(this.page);
+                return form.setPage(form.getNextPage(form.data, form.page)).then(() => {
+                    form._nextPage = form.getNextPage(form.data, form.page);
+                    form.emit('submit', { page: form.page, data: form.data });
+                });
+            });
+        }
+        else {
+            return Promise.reject(form.showErrors(null, true));
+        }
     }
 
     incrementPage(form)
@@ -132,9 +152,9 @@ class Form {
         form.page = form.page + 1;
     }
 
-    isNotLastPage(form)
+    isLastPage(form)
     {
-        return form.page !== form.pages.length;
+        return form.page === form.pages.length;
     }
 
     get embedApiEndPoint()
