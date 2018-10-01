@@ -110,6 +110,9 @@ class Form {
                     .then((response) => location.href = response.redirect_url);
                 }
             });
+
+            form.off('submitButton');
+
             form.on('submitButton', () => {
                 if (this.isLastPage(form)) {
                     form.submit();
