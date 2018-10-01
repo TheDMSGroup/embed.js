@@ -78,21 +78,10 @@ class Form {
      */
     embedForm(formJson)
     {
-        let xverify = new Component.xverify(this.form);
         this.form.wizard = new Formio.Form(document.getElementById('studio'), formJson, {
             submitOnEnter: true,
             breadcrumbSettings: { clickable: false },
             buttonSettings: { showCancel: false, showPrevious: false, showNext: false },
-            hooks: {
-                beforeSubmit: (payload, next) => {
-                    if (xverify.needsToBeValidated(payload.data)) {
-                        xverify.validate(payload.data)
-                        .then(() => next());
-                    } else {
-                        next();
-                    }
-                }
-            }
         });
         this.form.wizard
         .render()
@@ -125,22 +114,37 @@ class Form {
     }
 
     /**
-     * Override native form.io nextPage method in order to emit the "submit" event.
+     * Override native form.io nextPage method in order to emit the "submit" event and validate specific fields
+     * with xverify
      * @param form
      * @returns {*}
      */
     nextPage(form) {
+        let xverify = new Component.xverify(this.form);
+
         if (form.checkValidity(form.data, true)) {
             form.checkData(form.data, {
                 noValidate: true
             });
-            return form.beforeNext().then(() => {
-                form.history.push(this.page);
-                return form.setPage(form.getNextPage(form.data, form.page)).then(() => {
-                    form._nextPage = form.getNextPage(form.data, form.page);
-                    form.emit('submit', { page: form.page, data: form.data });
+
+            const goToNextPage = () => {
+                return form.beforeNext().then(() => {
+                    form.history.push(this.page);
+                    return form.setPage(form.getNextPage(form.data, form.page)).then(() => {
+                        form._nextPage = form.getNextPage(form.data, form.page);
+                        form.emit('submit', { page: form.page, data: form.data });
+                    });
                 });
-            });
+            };
+
+            if (xverify.needsToBeValidated(form.data)) {
+                xverify.validate(form.data)
+                    .then(() => {
+                        goToNextPage();
+                    });
+            } else {
+                goToNextPage();
+            }
         }
         else {
             return Promise.reject(form.showErrors(null, true));

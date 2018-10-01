@@ -15,10 +15,11 @@ class Xverify
 
     needsToBeValidated(payload)
     {
-        if (
-            payload.hasOwnProperty('phone') && !payload.hasOwnProperty('phone_valid') ||
-            payload.hasOwnProperty('email') && !payload.hasOwnProperty('email_valid')
-        ) {
+        if (payload.hasOwnProperty('phone') && !payload.hasOwnProperty('phone_valid')) {
+            return true;
+        }
+
+        if (payload.hasOwnProperty('email') && !payload.hasOwnProperty('email_valid')) {
             return true;
         }
     }
