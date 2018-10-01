@@ -1,4 +1,5 @@
 import Form from "./Form";
+import './style.css';
 
 class Embed
 {
@@ -26,8 +27,13 @@ class Embed
     {
         let element = document.createElement('div');
         element.id = 'studio';
+        this.addSpinner(element);
         scriptElement.parentNode.insertBefore(element, scriptElement.nextSibling);
+    }
 
+    addSpinner(element)
+    {
+        element.className += 'loader';
     }
 }
 export default Embed;

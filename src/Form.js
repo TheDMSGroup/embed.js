@@ -91,6 +91,7 @@ class Form {
         this.form.wizard
         .render()
         .then((form) => {
+            this.removeSpinner();
             new Component.trustedForm(form);
             let analytics = new Component.analytics(form);
             let jornaya = new Component.jornaya(form);
@@ -204,6 +205,12 @@ class Form {
         })
         .then((response) => response.json())
         .catch(error => console.error('Error:', error))
+    }
+
+    removeSpinner()
+    {
+        let element = document.getElementById('studio');
+        element.classList.remove('loader');
     }
 }
 export default Form;
