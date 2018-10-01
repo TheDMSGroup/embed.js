@@ -72,6 +72,11 @@ class Form {
         document.getElementsByTagName('head')[0].appendChild(style);
     }
 
+    set gaTrackerData(ga)
+    {
+        this.form.payload.ga = ga;
+    }
+
     /**
      * Embed the form on the actual page
      * @param formJson
@@ -87,17 +92,19 @@ class Form {
         .render()
         .then((form) => {
             new Component.trustedForm(form);
+            let analytics = new Component.analytics(form);
             let jornaya = new Component.jornaya(form);
             jornaya.attachJornayaIdToTCPA();
+            this.gaTrackerData = analytics.trackerData;
 
             form.on('submit', (payload) => {
                 if (!this.isLastPage(form)) {
-                    new Component.analytics(form).pageProgressionEvent();
+                    analytics.pageProgressionEvent();
                     jornaya.attachJornayaIdToTCPA();
                     this.incrementPage(form);
                     this.submitLeadData(payload.data, this.leadApiEndPoint);
                 } else {
-                    new Component.analytics(form).formCompletionEvent();
+                    analytics.formCompletionEvent();
                     jornaya.attachJornayaIdToTCPA();
                     this.submitLeadData(payload.data, this.leadApiEndPoint)
                     .then((response) => location.href = response.redirect_url);

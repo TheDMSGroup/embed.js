@@ -72,4 +72,46 @@ export default class Analytics
         }
         return s;
     }
+
+    /**
+     * Get the Google Analytics tracker data if available,
+     * given keys that we wish to populate offline.
+     *
+     * Supports unlimited trackers on the same page.
+     *
+     * @returns {{trackingId, userId, clientId...}}
+     */
+    get trackerData() {
+        let result = {},
+        keys = [
+            'adSenseId', 'clientId', 'clientIdTime',
+            'location', 'name', 'screenColors',
+            'screenResolution', 'trackingId', 'userId',
+            'viewportSize'
+        ];
+
+        if (typeof window.ga === 'function' &&
+            typeof window.ga.getAll === 'function') {
+            let trackers = window.ga.getAll();
+            for (let t in trackers) {
+                if (
+                    trackers.hasOwnProperty(t) &&
+                    typeof trackers[t] === 'object' &&
+                    typeof trackers[t].get === 'function') {
+                    result[t] = {};
+                    try {
+                        for (let k in keys) {
+                            if (keys.hasOwnProperty(k)) {
+                                // if (k === 'location') {
+                                // @todo - append/merge aggregated GET params to ensure realtime accuracy if they do not cause secondary sessions.
+                                // }
+                                result[t][keys[k]] = trackers[t].get(keys[k]);
+                            }
+                        }
+                    } catch (e) {}
+                }
+            }
+        }
+        return result;
+    }
 }
