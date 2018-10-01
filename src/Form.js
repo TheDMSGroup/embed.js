@@ -96,7 +96,6 @@ class Form {
             let jornaya = new Component.jornaya(form);
             jornaya.attachJornayaIdToTCPA();
             this.gaTrackerData = analytics.trackerData;
-
             form.on('submit', (payload) => {
                 if (!this.isLastPage(form)) {
                     analytics.pageProgressionEvent();
@@ -110,9 +109,8 @@ class Form {
                     .then((response) => location.href = response.redirect_url);
                 }
             });
-
+            // Remove all listeners on the submitButton event
             form.off('submitButton');
-
             form.on('submitButton', () => {
                 if (this.isLastPage(form)) {
                     form.submit();
