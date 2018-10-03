@@ -9,7 +9,8 @@
     "font-awesome": "^4.7.0",
     "formiojs": "^3.6.2",
     "get-js": "0.0.5",
-    "query-string": "^5.1.1"
+    "query-string": "^5.1.1",
+    "whatwg-fetch": "^3.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",
