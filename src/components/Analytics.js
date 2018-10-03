@@ -6,7 +6,7 @@ export default class Analytics
      */
     pageProgressionEvent(form)
     {
-        const event =  {
+        const event = {
             eventType: 'page_progression',
             eventLabel: 'P' + this.pad(form.page, 2),
             eventAction: 'P: ' + this.pad(form.page, 2) + '; T: ' + this.pad(form.pages.length, 2) + ';',

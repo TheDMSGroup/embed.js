@@ -5,6 +5,7 @@
   "main": "dist/embed.js",
   "dependencies": {
     "bootstrap": "^3.3.7",
+    "currentscript": "^1.1.1",
     "font-awesome": "^4.7.0",
     "formiojs": "^3.6.2",
     "get-js": "0.0.5",
