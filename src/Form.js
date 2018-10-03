@@ -93,18 +93,18 @@ class Form {
         .then((form) => {
             this.removeSpinner();
             new Component.trustedForm(form);
-            let analytics = new Component.analytics(form);
+            let analytics = new Component.analytics();
             let jornaya = new Component.jornaya(form);
             jornaya.attachJornayaIdToTCPA();
             this.gaTrackerData = analytics.trackerData;
             form.on('submit', (payload) => {
                 if (!this.isLastPage(form)) {
-                    analytics.pageProgressionEvent();
+                    analytics.pageProgressionEvent(form);
                     jornaya.attachJornayaIdToTCPA();
                     this.incrementPage(form);
                     this.submitLeadData(payload.data, this.leadApiEndPoint);
                 } else {
-                    analytics.formCompletionEvent();
+                    analytics.formCompletionEvent(form);
                     jornaya.attachJornayaIdToTCPA();
                     this.submitLeadData(payload.data, this.leadApiEndPoint)
                     .then((response) => location.href = response.redirect_url);
