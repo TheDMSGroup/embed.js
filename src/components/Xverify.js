@@ -1,5 +1,6 @@
 import FormioUtils from "formiojs/utils";
 import forEach from "lodash/foreach";
+import fetch from 'unfetch'
 
 class Xverify
 {

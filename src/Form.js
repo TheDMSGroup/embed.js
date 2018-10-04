@@ -1,6 +1,7 @@
 import * as Formio from 'formiojs';
 import URL from 'query-string';
 import Component from './components';
+import fetch from 'unfetch'
 
 class Form {
     /**
