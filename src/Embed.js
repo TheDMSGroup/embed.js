@@ -25,6 +25,11 @@ class Embed
      */
     createEmbedElement(scriptElement)
     {
+        if (typeof scriptElement === 'undefined') {
+            let scripts = document.getElementsByTagName('script');
+            scriptElement = scripts[scripts.length - 1];
+        }
+
         let element = document.createElement('div');
         element.id = 'studio';
         this.addSpinner(element);

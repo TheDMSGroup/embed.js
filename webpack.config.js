@@ -17,7 +17,13 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env'],
+            presets: [
+                ['@babel/preset-env', {
+                  targets: {
+                    ie: '11'
+                  }
+                }]
+            ],
             plugins: [
                 "transform-class-properties",
                 "add-module-exports"
