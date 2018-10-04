@@ -9,4 +9,4 @@ Embed implementation for the Studio CRM product built on top of [formio.js](http
 ### Mobile Browser Support
 | iPhone Safari        | Android Native | Android Chrome | Android Firefox |
 | :------------------: | :------------: | :------------: | :-------------: |  
-| iPhone 4S + (iOS 6)  |      4.3+      |   4.3+         | 4.3+            |
+| iPhone 4S+ (iOS 6)  |      4.3+      |   4.3+         | 4.3+            |

@@ -47,19 +47,22 @@ class Xverify
         })
         .then((response) => response.json())
         .then((results) => {
+            let errors = [];
             forEach(results, (fieldResult, fieldKey) => {
                if (!fieldResult.valid) {
                    FormioUtils.getComponent(
                        this.form.wizard.instance.components,
                        remapField[fieldKey]
-                   )
-                   .setCustomValidity(fieldResult.message, true);
+                   ).setCustomValidity(fieldResult.message, true);
 
-                   throw new Error(fieldResult.message);
+                   errors.push(fieldResult.message);
                } else {
                    payload[remapField[fieldKey] + '_valid'] = true;
                }
             });
+            if (errors.length > 0) {
+                throw new Error(errors);
+            }
         })
     }
 }
