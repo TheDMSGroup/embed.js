@@ -23,6 +23,8 @@ class Xverify
         if (payload.hasOwnProperty('email') && !payload.hasOwnProperty('email_valid')) {
             return true;
         }
+
+        return false;
     }
 
     validate(payload)

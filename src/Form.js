@@ -16,6 +16,7 @@ class Form {
     constructor(config) {
         this.form.config = config;
         this.setUrl();
+        this.setPageTitle();
         this.getFormJson();
     }
 
@@ -48,7 +49,12 @@ class Form {
      */
     setUrl()
     {
-        this.form.payload.pageURL = location.href;
+        this.form.payload.pageURL = this.form.payload['current_url'] = location.href;
+    }
+
+    setPageTitle()
+    {
+        this.form.payload['meta_title'] = document.getElementsByTagName('title')[0].innerText;
     }
 
     set authToken(token)
@@ -102,7 +108,6 @@ class Form {
                 if (!this.isLastPage(form)) {
                     analytics.pageProgressionEvent(form);
                     jornaya.attachJornayaIdToTCPA();
-                    this.incrementPage(form);
                     this.submitLeadData(payload.data, this.leadApiEndPoint);
                 } else {
                     analytics.formCompletionEvent(form);
@@ -138,12 +143,8 @@ class Form {
             });
 
             const goToNextPage = () => {
-                return form.beforeNext().then(() => {
-                    form.history.push(this.page);
-                    return form.setPage(form.getNextPage(form.data, form.page)).then(() => {
-                        form._nextPage = form.getNextPage(form.data, form.page);
-                        form.emit('submit', { page: form.page, data: form.data });
-                    });
+                form.beforeNext().then(() => {
+                    form.setPage(form.getNextPage(form.data, form.page));
                 });
             };
 
@@ -161,14 +162,10 @@ class Form {
         }
     }
 
-    incrementPage(form)
-    {
-        form.page = form.page + 1;
-    }
-
     isLastPage(form)
     {
-        return form.page === form.pages.length;
+        let currentPage = form.page;
+        return currentPage + 1 === form.pages.length;
     }
 
     get embedApiEndPoint()
