@@ -7,7 +7,7 @@
     "bootstrap": "^3.3.7",
     "currentscript": "^1.1.1",
     "font-awesome": "^4.7.0",
-    "formiojs": "^3.6.3",
+    "formiojs": "^3.6.12",
     "get-js": "0.0.5",
     "query-string": "^5.1.1",
     "unfetch": "^4.0.1"
