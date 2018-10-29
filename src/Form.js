@@ -94,7 +94,8 @@ class Form {
             submitOnEnter: true,
             breadcrumbSettings: { clickable: false },
             buttonSettings: { showCancel: false, showPrevious: false, showNext: false },
-            noAlerts: true
+            noAlerts: true,
+            namespace: 'studio'
         });
         this.form.wizard
         .render()
@@ -120,10 +121,13 @@ class Form {
                 }
             });
             // Remove all listeners on the submitButton event since this event will try to submit the form ahead of time.
-            form.on('render', () => form.events.removeAllListeners('formio.submitButton'));
+            form.on('render', () => form.events.removeAllListeners(`${form.options.namespace}.submitButton`));
             // This seems to be the only way to latch onto the submitButton event after removing all the listeners from it.
             form.events.onAny((event) => {
                 if (event.includes('submitButton')) {
+                    let button = form.focusedComponent;
+                    button.loading = true;
+                    button.disabled = true;
                     this.nextPage(form);
                 }
             });
