@@ -94,6 +94,7 @@ class Form {
             submitOnEnter: true,
             breadcrumbSettings: { clickable: false },
             buttonSettings: { showCancel: false, showPrevious: false, showNext: false },
+            noAlerts: true
         });
         this.form.wizard
         .render()
@@ -104,6 +105,8 @@ class Form {
             let jornaya = new Component.jornaya(form);
             jornaya.attachJornayaIdToTCPA();
             this.gaTrackerData = analytics.trackerData;
+            form.customCurrentPage = 0;
+
             form.on('submit', (payload) => {
                 if (!this.isLastPage(form)) {
                     analytics.pageProgressionEvent(form);
@@ -116,13 +119,17 @@ class Form {
                     .then((response) => location.href = response.redirect_url);
                 }
             });
-            // Remove all listeners on the submitButton event
-            form.off('submitButton');
-            form.on('submitButton', () => {
-                if (this.isLastPage(form)) {
-                    form.submit();
-                } else {
-                    this.nextPage(form);
+            // Remove all listeners on the submitButton event since this event will try to submit the form ahead of time.
+            form.on('render', () => form.events.removeAllListeners('formio.submitButton'));
+            // This seems to be the only way to latch onto the submitButton event after removing all the listeners from it.
+            form.events.onAny((event) => {
+                if (event.includes('submitButton')) {
+                    if (this.isLastPage(form)) {
+                        form.submit();
+                    } else {
+                        this.nextPage(form);
+                        console.log(form.customCurrentPage);
+                    }
                 }
             });
         })
@@ -145,6 +152,8 @@ class Form {
             const goToNextPage = () => {
                 form.beforeNext().then(() => {
                     form.setPage(form.getNextPage(form.data, form.page));
+                    form.customCurrentPage++;
+                    form.emit('submit', { page: form.page, data: form.data });
                 });
             };
 
@@ -164,8 +173,7 @@ class Form {
 
     isLastPage(form)
     {
-        let currentPage = form.page;
-        return currentPage + 1 === form.pages.length;
+        return form.customCurrentPage === form.pages.length;
     }
 
     get embedApiEndPoint()

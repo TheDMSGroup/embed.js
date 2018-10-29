@@ -8,8 +8,8 @@ export default class Analytics
     {
         const event = {
             eventType: 'page_progression',
-            eventLabel: 'P' + this.pad(form.page, 2),
-            eventAction: 'P: ' + this.pad(form.page, 2) + '; T: ' + this.pad(form.pages.length, 2) + ';',
+            eventLabel: 'P' + this.pad(form.customCurrentPage, 2),
+            eventAction: 'P: ' + this.pad(form.customCurrentPage, 2) + '; T: ' + this.pad(form.pages.length, 2) + ';',
             eventCompleted: false
         };
 
@@ -24,8 +24,8 @@ export default class Analytics
     {
         const event = {
             eventType: 'form_completed',
-            eventLabel: 'P' + this.pad(form.page, 2),
-            eventAction: 'P: ' + this.pad(form.page, 2) + '; T: ' + this.pad(form.pages.length, 2) + ';',
+            eventLabel: 'P' + this.pad(form.customCurrentPage, 2),
+            eventAction: 'P: ' + this.pad(form.customCurrentPage, 2) + '; T: ' + this.pad(form.pages.length, 2) + ';',
             eventCompleted: true
         };
 
