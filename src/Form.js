@@ -128,7 +128,6 @@ class Form {
                         form.submit();
                     } else {
                         this.nextPage(form);
-                        console.log(form.customCurrentPage);
                     }
                 }
             });
