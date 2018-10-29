@@ -108,7 +108,7 @@ class Form {
             form.customCurrentPage = 0;
 
             form.on('submit', (payload) => {
-                if (!this.isLastPage(form)) {
+                if (this.isNotLastPage(form)) {
                     analytics.pageProgressionEvent(form);
                     jornaya.attachJornayaIdToTCPA();
                     this.submitLeadData(payload.data, this.leadApiEndPoint);
@@ -124,9 +124,7 @@ class Form {
             // This seems to be the only way to latch onto the submitButton event after removing all the listeners from it.
             form.events.onAny((event) => {
                 if (event.includes('submitButton')) {
-                    if (this.isLastPage(form)) {
-                        form.submit();
-                    } else {
+                    if (this.isNotLastPage(form)) {
                         this.nextPage(form);
                     }
                 }
@@ -170,9 +168,9 @@ class Form {
         }
     }
 
-    isLastPage(form)
+    isNotLastPage(form)
     {
-        return form.customCurrentPage === form.pages.length;
+        return form.customCurrentPage !== form.pages.length;
     }
 
     get embedApiEndPoint()
