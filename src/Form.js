@@ -124,9 +124,7 @@ class Form {
             // This seems to be the only way to latch onto the submitButton event after removing all the listeners from it.
             form.events.onAny((event) => {
                 if (event.includes('submitButton')) {
-                    if (this.isNotLastPage(form)) {
-                        this.nextPage(form);
-                    }
+                    this.nextPage(form);
                 }
             });
         })
