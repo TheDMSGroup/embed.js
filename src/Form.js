@@ -26,7 +26,10 @@ class Form {
     getFormJson()
     {
         this.setUrlParams();
-        fetch(this.embedApiEndPoint, {
+
+        let embedApiUrl = this.form.config.formId ? this.embedFormApiEndPoint : this.embedApiEndPoint;
+
+        fetch(embedApiUrl, {
             method: 'POST',
             body: JSON.stringify(this.form.payload),
             headers: {
@@ -173,6 +176,11 @@ class Form {
     isNotLastPage(form)
     {
         return form.customCurrentPage !== form.pages.length;
+    }
+
+    get embedFormApiEndPoint()
+    {
+        return this.form.config.url + '/api/v1/embed/form/' + this.form.config.account + '/' + this.form.config.formId;
     }
 
     get embedApiEndPoint()
