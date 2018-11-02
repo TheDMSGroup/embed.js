@@ -1,7 +1,9 @@
-import embed from './Embed';
+import Embed from './Embed';
 import 'currentscript';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.min.css'
 
-export { embed };
+const embed = (options) => new Embed(options);
+
+export { embed }
