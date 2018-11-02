@@ -6,7 +6,7 @@ module.exports = {
   output: {
     filename: 'embed.js',
     path: path.resolve(__dirname, 'dist'),
-    library: 'studio',
+    library: 'crm',
     libraryTarget: 'var'
   },
   module: {
