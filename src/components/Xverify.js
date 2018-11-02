@@ -16,11 +16,11 @@ class Xverify
 
     needsToBeValidated(payload)
     {
-        if (payload.hasOwnProperty('phone') && !payload.hasOwnProperty('phone_valid')) {
+        if (this.form.wizard.form.verify_phone && payload.hasOwnProperty('phone') && !payload.hasOwnProperty('phone_valid')) {
             return true;
         }
 
-        if (payload.hasOwnProperty('email') && !payload.hasOwnProperty('email_valid')) {
+        if (this.form.wizard.form.verify_email && payload.hasOwnProperty('email') && !payload.hasOwnProperty('email_valid')) {
             return true;
         }
 
@@ -31,10 +31,10 @@ class Xverify
     {
         let xverifyPayload = {};
 
-        if (payload.hasOwnProperty('email') && payload.email !== '') {
+        if (this.form.wizard.form.verify_email && payload.hasOwnProperty('email') && payload.email !== '') {
             xverifyPayload['email'] = payload.email;
         }
-        if (payload.hasOwnProperty('phone') && payload.phone !== '') {
+        if (this.form.wizard.form.verify_phone && payload.hasOwnProperty('phone') && payload.phone !== '') {
             xverifyPayload['phone_cell'] = payload.phone;
         }
 
