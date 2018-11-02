@@ -118,7 +118,7 @@ class Form {
                     analytics.formCompletionEvent(form);
                     jornaya.attachJornayaIdToTCPA();
                     this.submitLeadData(payload.data, this.leadApiEndPoint)
-                    .then((response1) => location.href = response.redirect_url);
+                    .then((response) => location.href = response.redirect_url);
                 }
             });
             // Remove all listeners on the submitButton event since this event will try to submit the form ahead of time.

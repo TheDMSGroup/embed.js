@@ -14,13 +14,24 @@ class Xverify
         return this.form.config.url + '/api/v1/lead/xverify/' + this.form.config.account;
     }
 
+    extractFormSetting(keyName)
+    {
+        if (this.hasOwnProperty('form'))
+            if (this.form.hasOwnProperty('wizard'))
+                if (this.form.wizard.hasOwnProperty('form'))
+                    if (this.form.wizard.form.hasOwnProperty(keyName))
+                        return this.form.wizard.form[keyName];
+
+        return null;
+    }
+
     needsToBeValidated(payload)
     {
-        if (this.form.wizard.form.verify_phone && payload.hasOwnProperty('phone') && !payload.hasOwnProperty('phone_valid')) {
+        if (this.extractFormSetting('verify_phone') && payload.hasOwnProperty('phone') && !payload.hasOwnProperty('phone_valid')) {
             return true;
         }
 
-        if (this.form.wizard.form.verify_email && payload.hasOwnProperty('email') && !payload.hasOwnProperty('email_valid')) {
+        if (this.extractFormSetting('verify_email') && payload.hasOwnProperty('email') && !payload.hasOwnProperty('email_valid')) {
             return true;
         }
 
@@ -31,10 +42,10 @@ class Xverify
     {
         let xverifyPayload = {};
 
-        if (this.form.wizard.form.verify_email && payload.hasOwnProperty('email') && payload.email !== '') {
+        if (this.extractFormSetting('verify_email') && payload.hasOwnProperty('email') && payload.email !== '') {
             xverifyPayload['email'] = payload.email;
         }
-        if (this.form.wizard.form.verify_phone && payload.hasOwnProperty('phone') && payload.phone !== '') {
+        if (this.extractFormSetting('verify_phone') && payload.hasOwnProperty('phone') && payload.phone !== '') {
             xverifyPayload['phone_cell'] = payload.phone;
         }
 
