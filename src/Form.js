@@ -27,9 +27,7 @@ class Form {
     {
         this.setUrlParams();
 
-        let embedApiUrl = this.form.config.formId ? this.embedFormApiEndPoint : this.embedApiEndPoint;
-
-        fetch(embedApiUrl, {
+        fetch(this.embedApiEndPoint, {
             method: 'POST',
             body: JSON.stringify(this.form.payload),
             headers: {
@@ -173,21 +171,51 @@ class Form {
         }
     }
 
+    /**
+     * @param form
+     * @returns {boolean}
+     */
     isNotLastPage(form)
     {
         return form.customCurrentPage !== form.pages.length;
     }
 
+    /**
+     * @returns {string}
+     */
+    get embedTargetApiEndPoint()
+    {
+        return this.form.config.url + '/api/v1/embed/target/' + this.form.config.account + '/' + this.form.config.targetId;
+    }
+
+    /**
+     * @returns {string}
+     */
     get embedFormApiEndPoint()
     {
         return this.form.config.url + '/api/v1/embed/form/' + this.form.config.account + '/' + this.form.config.formId;
     }
 
+    /**
+     * Determine which API endpoint to load Form Data from
+     * @returns {*}
+     */
     get embedApiEndPoint()
     {
-        return this.form.config.url + '/api/v1/embed/target/' + this.form.config.account + '/' + this.form.config.targetId;
+        if (this.hasOwnProperty('form') && this.form.hasOwnProperty('config')) {
+            if (this.form.config.hasOwnProperty('formId') && this.form.config.formId > 0) {
+                return this.embedFormApiEndPoint;
+            } else if (this.form.config.hasOwnProperty('targetId') && this.form.config.targetId) {
+                return this.embedTargetApiEndPoint;
+            }
+        }
+
+        throw new Error('Invalid configuration: missing formId OR targetId');
     }
 
+    /**
+     * @returns {string}
+     */
     get leadApiEndPoint()
     {
         return this.form.config.url + '/api/v1/lead/' + this.form.config.account;
@@ -220,6 +248,9 @@ class Form {
         .catch(error => console.error('Error:', error))
     }
 
+    /**
+     * Hide Spinner UI Element
+     */
     removeSpinner()
     {
         let element = document.getElementById('studio');
