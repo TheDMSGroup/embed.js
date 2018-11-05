@@ -26,7 +26,6 @@ class Form {
     getFormJson()
     {
         this.setUrlParams();
-
         let embedApiUrl = this.formId ? this.embedFormApiEndPoint : this.embedApiEndPoint;
 
         fetch(embedApiUrl, {
@@ -173,36 +172,75 @@ class Form {
         }
     }
 
+    /**
+     * @param form
+     * @returns {boolean}
+     */
     isNotLastPage(form)
     {
         return form.customCurrentPage !== form.pages.length;
     }
 
+    /**
+     * @returns {string}
+     */
+    get embedTargetApiEndPoint()
+    {
+        return this.endpointBase + '/api/v1/embed/target/' + this.form.config.account + '/' + this.targetId;
+    }
+
+    /**
+     * @returns {string}
+     */
     get embedFormApiEndPoint()
     {
         return this.endpointBase + '/api/v1/embed/form/' + this.form.config.account + '/' + this.formId;
     }
 
+    /**
+     * Determine which API endpoint to load Form Data from
+     * @returns {*}
+     */
     get embedApiEndPoint()
     {
-        return this.endpointBase + '/api/v1/embed/target/' + this.form.config.account + '/' + this.targetId;
+        if (this.hasOwnProperty('form') && this.form.hasOwnProperty('config')) {
+            if (this.form.config.hasOwnProperty('form') && this.formId > 0) {
+                return this.embedFormApiEndPoint;
+            } else if (this.form.config.hasOwnProperty('target') && this.targetId) {
+                return this.embedTargetApiEndPoint;
+            }
+        }
+
+        throw new Error('Invalid configuration: missing formId OR targetId');
     }
 
+    /**
+     * @returns {string}
+     */
     get leadApiEndPoint()
     {
         return this.endpointBase + '/api/v1/lead/' + this.form.config.account;
     }
 
+    /**
+     * @returns {integer}
+     */
     get formId()
     {
         return this.form.config.form;
     }
 
+    /**
+     * @returns {integer}
+     */
     get targetId()
     {
         return this.form.config.target;
     }
 
+    /**
+     * @returns {string}
+     */
     get endpointBase()
     {
         return this.form.config.url;
@@ -235,6 +273,9 @@ class Form {
         .catch(error => console.error('Error:', error))
     }
 
+    /**
+     * Hide Spinner UI Element
+     */
     removeSpinner()
     {
         let element = document.getElementById('studio');
