@@ -1,6 +1,11 @@
 # embed.js
 Embed implementation for the Studio CRM product built on top of [formio.js](https://github.com/formio/formio.js) using modern ES6 practices and compiled to ES5 using the babel compiler.
 
+### Install with NPM
+```
+npm install @ivanljutyj/embed.js
+```
+
 ### Desktop Browser Support
 | Internet Explorer | Edge | Firefox | Safari | Chrome |
 | :---------------: | :---: | :-----: | :----: | :----: |
