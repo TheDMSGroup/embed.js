@@ -27,7 +27,7 @@ class Form {
     {
         this.setUrlParams();
 
-        let embedApiUrl = this.form.config.formId ? this.embedFormApiEndPoint : this.embedApiEndPoint;
+        let embedApiUrl = this.formId ? this.embedFormApiEndPoint : this.embedApiEndPoint;
 
         fetch(embedApiUrl, {
             method: 'POST',
@@ -180,17 +180,32 @@ class Form {
 
     get embedFormApiEndPoint()
     {
-        return this.form.config.url + '/api/v1/embed/form/' + this.form.config.account + '/' + this.form.config.formId;
+        return this.endpointBase + '/api/v1/embed/form/' + this.form.config.account + '/' + this.formId;
     }
 
     get embedApiEndPoint()
     {
-        return this.form.config.url + '/api/v1/embed/target/' + this.form.config.account + '/' + this.form.config.targetId;
+        return this.endpointBase + '/api/v1/embed/target/' + this.form.config.account + '/' + this.targetId;
     }
 
     get leadApiEndPoint()
     {
-        return this.form.config.url + '/api/v1/lead/' + this.form.config.account;
+        return this.endpointBase + '/api/v1/lead/' + this.form.config.account;
+    }
+
+    get formId()
+    {
+        return this.form.config.form;
+    }
+
+    get targetId()
+    {
+        return this.form.config.target;
+    }
+
+    get endpointBase()
+    {
+        return this.form.config.url;
     }
 
     /**
