@@ -26,8 +26,9 @@ class Form {
     getFormJson()
     {
         this.setUrlParams();
+        let embedApiUrl = this.formId ? this.embedFormApiEndPoint : this.embedApiEndPoint;
 
-        fetch(this.embedApiEndPoint, {
+        fetch(embedApiUrl, {
             method: 'POST',
             body: JSON.stringify(this.form.payload),
             headers: {
@@ -185,7 +186,7 @@ class Form {
      */
     get embedTargetApiEndPoint()
     {
-        return this.form.config.url + '/api/v1/embed/target/' + this.form.config.account + '/' + this.form.config.targetId;
+        return this.endpointBase + '/api/v1/embed/target/' + this.form.config.account + '/' + this.targetId;
     }
 
     /**
@@ -193,7 +194,7 @@ class Form {
      */
     get embedFormApiEndPoint()
     {
-        return this.form.config.url + '/api/v1/embed/form/' + this.form.config.account + '/' + this.form.config.formId;
+        return this.endpointBase + '/api/v1/embed/form/' + this.form.config.account + '/' + this.formId;
     }
 
     /**
@@ -203,9 +204,9 @@ class Form {
     get embedApiEndPoint()
     {
         if (this.hasOwnProperty('form') && this.form.hasOwnProperty('config')) {
-            if (this.form.config.hasOwnProperty('formId') && this.form.config.formId > 0) {
+            if (this.form.config.hasOwnProperty('form') && this.formId > 0) {
                 return this.embedFormApiEndPoint;
-            } else if (this.form.config.hasOwnProperty('targetId') && this.form.config.targetId) {
+            } else if (this.form.config.hasOwnProperty('target') && this.targetId) {
                 return this.embedTargetApiEndPoint;
             }
         }
@@ -218,7 +219,31 @@ class Form {
      */
     get leadApiEndPoint()
     {
-        return this.form.config.url + '/api/v1/lead/' + this.form.config.account;
+        return this.endpointBase + '/api/v1/lead/' + this.form.config.account;
+    }
+
+    /**
+     * @returns {integer}
+     */
+    get formId()
+    {
+        return this.form.config.form;
+    }
+
+    /**
+     * @returns {integer}
+     */
+    get targetId()
+    {
+        return this.form.config.target;
+    }
+
+    /**
+     * @returns {string}
+     */
+    get endpointBase()
+    {
+        return this.form.config.url;
     }
 
     /**

@@ -15,30 +15,45 @@ class Embed
      */
     constructor(config)
     {
-        this.form = new Form(config);
-        this.createEmbedElement(config.element);
+        this.config = config;
+        this.createEmbedElement();
+        this.form = new Form(this.config);
     }
 
     /**
      * Create the embed element where we will inject our Formio instance
-     * @param scriptElement
      */
-    createEmbedElement(scriptElement)
+    createEmbedElement()
     {
-        if (typeof scriptElement === 'undefined') {
-            let scripts = document.getElementsByTagName('script');
-            scriptElement = scripts[scripts.length - 1];
-        }
-
+        let scripts = document.getElementsByTagName('script');
+        let currentScriptElement = scripts[scripts.length - 1];
+        let scriptElement = scripts[scripts.length - 2];
+        this.endpointBase = this.url || this.getScriptSource(scriptElement);
         let element = document.createElement('div');
         element.id = 'studio';
         this.addSpinner(element);
-        scriptElement.parentNode.insertBefore(element, scriptElement.nextSibling);
+        currentScriptElement.parentNode.insertBefore(element, currentScriptElement.nextSibling);
     }
 
     addSpinner(element)
     {
         element.className += 'loader';
     }
+
+    getScriptSource(script)
+    {
+        return new URL(script.src).origin;
+    }
+
+    get url()
+    {
+        return this.config.url;
+    }
+
+    set endpointBase(url)
+    {
+        this.config.url = url;
+    }
+
 }
 export default Embed;
