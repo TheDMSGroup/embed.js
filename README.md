@@ -10,3 +10,14 @@ Embed implementation for the Studio CRM product built on top of [formio.js](http
 | iPhone Safari        | Android Native | Android Chrome | Android Firefox |
 | :------------------: | :------------: | :------------: | :-------------: |  
 | iPhone 4S+ (iOS 6)  |      4.3+      |   4.3+         | 4.3+            |
+
+### Form Embedding
+```html
+    <script src="dist/embed.js"></script>
+    <script>crm.embed({ account: 'DMS', target: 1, url: 'http://studio.test' });</script>
+```
+
+### Config Options
+* account - REQUIRED
+* target|form - REQUIRED
+* url - OPTIONAL
