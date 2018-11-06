@@ -29,7 +29,6 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
     "watch": "webpack --watch",
-    "postinstall": "npm run build"
   },
   "repository": {
     "type": "git",
