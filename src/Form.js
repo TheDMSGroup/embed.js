@@ -123,14 +123,15 @@ class Form {
                 }
             });
             // Remove all listeners on the submitButton event since this event will try to submit the form ahead of time.
-            form.on('render', () => form.events.removeAllListeners(`${form.options.namespace}.submitButton`));
+            form.on('render', () => {
+                form.events.removeAllListeners(`${form.options.namespace}.submitButton`)
+            });
             // This seems to be the only way to latch onto the submitButton event after removing all the listeners from it.
             form.events.onAny((event) => {
                 if (event.includes('submitButton')) {
                     let button = form.focusedComponent;
-                    button.loading = true;
-                    button.disabled = true;
-                    this.nextPage(form);
+                    button.loading = button.disabled = true;
+                    this.triggerFieldEvent(form).then(() => this.nextPage(form));
                 }
             });
         })
@@ -280,6 +281,23 @@ class Form {
     {
         let element = document.getElementById('studio');
         element.classList.remove('loader');
+    }
+
+    /**
+     * This method is used for forcing input events to be triggered whenever we submit the form
+     *
+     * @param form
+     * @returns {Promise}
+     */
+    triggerFieldEvent(form)
+    {
+        return new Promise(resolve => {
+            FormioUtils.eachComponent(form.components, (component) => {
+                component.setInputMask(component.inputs[0]);
+                component.updateValue();
+            });
+            resolve();
+        });
     }
 }
 export default Form;
