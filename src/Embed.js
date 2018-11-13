@@ -1,4 +1,5 @@
 import Form from "./Form";
+import 'url-polyfill';
 import './style.css';
 
 class Embed
