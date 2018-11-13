@@ -6,8 +6,8 @@ class Jornaya
     constructor(form)
     {
         this.data = form.data;
-        if (form.wizard.lidstatic_script) {
-            this.jornayaScript = form.wizard.lidstatic_script;
+        if (form.hasOwnProperty('schema') && form.schema.hasOwnProperty('lidstatic_script')) {
+            this.jornayaScript = form.schema.lidstatic_script;
         }
     }
 

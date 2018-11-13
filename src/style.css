@@ -1,4 +1,4 @@
-.loader {
+.ll .loader {
     border: 8px solid #f3f3f3;
     border-radius: 50%;
     border-top: 8px solid #3498db;
@@ -7,6 +7,11 @@
     -webkit-animation: spin 2s linear infinite; /* Safari */
     animation: spin 2s linear infinite;
     margin: 10% auto;
+}
+
+/* Hide the native form progression buttons */
+.ll ul.list-inline {
+    display: none;
 }
 
 /* Safari */

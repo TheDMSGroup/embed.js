@@ -38,6 +38,8 @@ class Form {
         .then((response) => response.json())
         .catch(error => console.error('Error:', error))
         .then((json) => {
+            // Always force the form to render a wizard
+            json.display = 'wizard';
             this.authToken = json.token;
             this.formId = json.formId;
             this.uuid = json.leadId;
@@ -103,6 +105,7 @@ class Form {
         .render()
         .then((form) => {
             this.removeSpinner();
+            document.getElementById('studio').classList.add('ll');
             new Component.trustedForm(form);
             let analytics = new Component.analytics();
             let jornaya = new Component.jornaya(form);
@@ -130,7 +133,9 @@ class Form {
             form.events.onAny((event) => {
                 if (event.includes('submitButton')) {
                     let button = form.focusedComponent;
-                    button.loading = button.disabled = true;
+                    if (button) {
+                        button.loading = button.disabled = true;
+                    }
                     this.triggerFieldEvent(form).then(() => this.nextPage(form));
                 }
             });
@@ -179,7 +184,7 @@ class Form {
      */
     isNotLastPage(form)
     {
-        return form.customCurrentPage !== form.pages.length;
+        return form.customCurrentPage !== (form.pages.length ? form.pages.length : 1);
     }
 
     /**

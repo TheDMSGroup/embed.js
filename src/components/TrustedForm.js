@@ -7,7 +7,9 @@ class TrustedForm
     constructor(form)
     {
         this.payload = form.data;
-        this.trustedForm = form.wizard.trustedform_script;
+        if (form.hasOwnProperty('schema') && form.schema.hasOwnProperty('trustedform_script')) {
+            this.trustedForm = form.schema.trustedform_script;
+        }
     }
 
     /**
