@@ -1,6 +1,6 @@
 {
   "name": "@ivanljutyj/embed.js",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Embed implementation for the Studio CRM product",
   "main": "dist/embed.js",
   "dependencies": {
@@ -28,7 +28,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack",
+    "build": "webpack --mode production",
+    "build-dev": "webpack --mode development",
     "watch": "webpack --watch"
   },
   "repository": {

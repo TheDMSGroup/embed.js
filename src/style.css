@@ -1,4 +1,4 @@
-.ll .loader {
+#studio.loader {
     border: 8px solid #f3f3f3;
     border-radius: 50%;
     border-top: 8px solid #3498db;
@@ -10,7 +10,7 @@
 }
 
 /* Hide the native form progression buttons */
-.ll ul.list-inline {
+#studio ul.list-inline {
     display: none;
 }
 
