@@ -14,6 +14,7 @@ class Form {
     };
 
     constructor(config) {
+        Component.override.checkbox(Formio);
         this.form.config = config;
         this.setUrl();
         this.setPageTitle();
