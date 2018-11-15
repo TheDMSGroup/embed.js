@@ -30,7 +30,7 @@ export default class Checkbox {
      */
     overrideLabelCreation()
     {
-        this.checkbox.__proto__.createLabel = function(container, input) {
+        Object.getPrototypeOf(this.checkbox).createLabel = function(container, input) {
             const isLabelHidden = this.labelIsHidden();
             let className = 'control-label form-check-label';
             if (this.component.input
