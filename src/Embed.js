@@ -11,14 +11,17 @@ class Embed
      * Config example
      * {
      *   account: 'DMS',
-     *   targetId: 1
+     *   target: 1 
      * }
      * @param config
      */
     constructor(config)
     {
         this.config = config;
-        this.createEmbedElement().then(() => new Form(this.config));
+        this.createEmbedElement().then((element) => {
+            this.addSpinner(element);
+            new Form(this.config)
+        });
     }
 
     /**
