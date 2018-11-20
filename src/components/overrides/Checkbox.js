@@ -3,9 +3,9 @@ export default class Checkbox {
      * The purpose of this class is to override functionality from the native formio CheckBox component.
      * @param form
      */
-    constructor(form)
+    constructor(checkbox)
     {
-        this.checkbox = form.Components.components.checkbox;
+        this.checkbox = checkbox;
         this.overrideLabelCreation();
     }
 

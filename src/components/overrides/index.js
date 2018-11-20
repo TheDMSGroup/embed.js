@@ -1,7 +1,15 @@
-import Checkbox from './Checkbox';
+import AllComponents from 'formiojs/components';
+import Components from 'formiojs/components/Components';
 
-const checkbox = (form) => new Checkbox(form);
+import Checkbox from './Checkbox';
+import Button from "./Button";
+
+const init = () => {
+    new Checkbox(AllComponents.checkbox);
+    new Button(AllComponents.button);
+    Components.setComponents(AllComponents);
+};
 
 export default {
-    checkbox: checkbox
+    init: init
 }

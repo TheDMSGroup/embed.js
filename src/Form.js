@@ -1,4 +1,4 @@
-import * as Formio from 'formiojs';
+import 'formiojs/Form';
 import URL from 'query-string';
 import Component from './components';
 import fetch from 'unfetch'
@@ -8,13 +8,13 @@ class Form {
      * @var {Object}
      */
     form = {
-        wizard: {},
+        instance: {},
         config: {},
         payload: {},
     };
 
     constructor(config) {
-        Component.override.checkbox(Formio);
+        Component.override.init();
         this.form.config = config;
         this.setUrl();
         this.setPageTitle();
@@ -95,16 +95,15 @@ class Form {
      */
     embedForm(formJson)
     {
-        this.form.wizard = new Formio.Form(document.getElementById('studio'), formJson, {
+        Formio.createForm(document.getElementById('studio'), formJson, {
             submitOnEnter: true,
             breadcrumbSettings: { clickable: false },
             buttonSettings: { showCancel: false, showPrevious: false, showNext: false },
             noAlerts: true,
             namespace: 'studio'
-        });
-        this.form.wizard
-        .render()
+        })
         .then((form) => {
+            this.form.instance = form;
             this.removeSpinner();
             document.getElementById('studio').classList.add('ll');
             new Component.trustedForm(form);
@@ -114,7 +113,7 @@ class Form {
             this.gaTrackerData = analytics.trackerData;
             form.customCurrentPage = 0;
 
-            form.on('submit', (payload) => {
+            form.on('next', (payload) => {
                 if (this.isNotLastPage(form)) {
                     analytics.pageProgressionEvent(form);
                     jornaya.attachJornayaIdToTCPA();
@@ -126,19 +125,9 @@ class Form {
                     .then((response) => location.href = response.redirect_url);
                 }
             });
-            // Remove all listeners on the submitButton event since this event will try to submit the form ahead of time.
-            form.on('render', () => {
-                form.events.removeAllListeners(`${form.options.namespace}.submitButton`)
-            });
-            // This seems to be the only way to latch onto the submitButton event after removing all the listeners from it.
-            form.events.onAny((event) => {
-                if (event.includes('submitButton')) {
-                    let button = form.focusedComponent;
-                    if (button) {
-                        button.loading = button.disabled = true;
-                    }
-                    this.triggerFieldEvent(form).then(() => this.nextPage(form));
-                }
+
+            form.on('nextButton', () => {
+                this.triggerFieldEvent(form).then(() => this.nextPage(form));
             });
         })
     }
@@ -161,7 +150,7 @@ class Form {
                 form.beforeNext().then(() => {
                     form.setPage(form.getNextPage(form.data, form.page));
                     form.customCurrentPage++;
-                    form.emit('submit', { page: form.page, data: form.data });
+                    form.emit('next', { data: form.data });
                 });
             };
 

@@ -17,10 +17,10 @@ class Xverify
     extractFormSetting(keyName)
     {
         if (this.hasOwnProperty('form'))
-            if (this.form.hasOwnProperty('wizard'))
-                if (this.form.wizard.hasOwnProperty('form'))
-                    if (this.form.wizard.form.hasOwnProperty(keyName))
-                        return this.form.wizard.form[keyName];
+            if (this.form.hasOwnProperty('instance'))
+                if (this.form.instance.hasOwnProperty('wizard'))
+                    if (this.form.instance.wizard.hasOwnProperty(keyName))
+                        return this.form.instance.wizard[keyName];
 
         return null;
     }
@@ -64,7 +64,7 @@ class Xverify
             forEach(results, (fieldResult, fieldKey) => {
                if (!fieldResult.valid) {
                    FormioUtils.getComponent(
-                       this.form.wizard.instance.components,
+                       this.form.instance.components,
                        remapField[fieldKey]
                    ).setCustomValidity(fieldResult.message, true);
 
