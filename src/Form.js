@@ -1,4 +1,4 @@
-import 'formiojs/Form';
+import Formio from 'formiojs/Form';
 import URL from 'query-string';
 import Component from './components';
 import fetch from 'unfetch'
@@ -95,13 +95,14 @@ class Form {
      */
     embedForm(formJson)
     {
-        Formio.createForm(document.getElementById('studio'), formJson, {
+        new Formio(document.getElementById('studio'), formJson, {
             submitOnEnter: true,
             breadcrumbSettings: { clickable: false },
             buttonSettings: { showCancel: false, showPrevious: false, showNext: false },
             noAlerts: true,
             namespace: 'studio'
         })
+        .render()
         .then((form) => {
             this.form.instance = form;
             this.removeSpinner();
