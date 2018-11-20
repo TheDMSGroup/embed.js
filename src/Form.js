@@ -126,9 +126,7 @@ class Form {
                 }
             });
 
-            form.on('nextButton', () => {
-                this.triggerFieldEvent(form).then(() => this.nextPage(form));
-            });
+            form.on('nextButton', () => this.triggerFieldEvent(form).then(() => this.nextPage(form)));
         })
     }
 

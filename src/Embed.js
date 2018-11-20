@@ -1,5 +1,6 @@
 import Form from "./Form";
 import 'url-polyfill';
+import 'dom-previous-element-sibling';
 import './style.css';
 
 class Embed
@@ -28,7 +29,7 @@ class Embed
     {
         let scripts = document.getElementsByTagName('script');
         let currentScriptElement = scripts[scripts.length - 1];
-        let scriptElement = scripts[scripts.length - 2];
+        let scriptElement = currentScriptElement.previousElementSibling;
         this.endpointBase = this.url || this.getScriptSource(scriptElement);
         let element = document.createElement('div');
         element.id = 'studio';
