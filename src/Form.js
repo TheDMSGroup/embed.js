@@ -2,6 +2,7 @@ import Formio from 'formiojs/Form';
 import URL from 'query-string';
 import Component from './components';
 import fetch from 'unfetch'
+import 'formiojs/dist/formio.form.min.css';
 
 class Form {
     /**
