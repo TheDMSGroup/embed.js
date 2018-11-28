@@ -78,7 +78,7 @@ export default class History {
      */
     get storeFormData()
     {
-        return this.store.get('form_session').data || {};
+        return this.store.get('form_session').data || null;
     }
 
     /**
@@ -95,7 +95,7 @@ export default class History {
      */
     initialize()
     {
-        if (!this.storeFormData) {
+        if (!this.store.get('form_session')) {
             this.updateState();
         }
         
