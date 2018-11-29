@@ -129,16 +129,19 @@ export default class History {
     listen()
     {
         this.instance.listen(() => {
-            let currentPage = 0;
+            let currentPage = this.currentPage;
+            // If this is true, we must of went backwards in the flow
             if (this.currentNaturalPage > this.currentHashedPage) {
-                currentPage = this.currentPage - 1;
+                currentPage = currentPage - 1;
             } else {
-                currentPage = this.currentPage + 1;
+                currentPage = currentPage + 1;
             }
-            
-            this.form.setPage(currentPage);
-            this.storagePage = currentPage;
-            this.form.customCurrentPage = this.currentPage;
+
+            if (this.currentNaturalPage !== this.currentHashedPage) {
+                this.form.setPage(currentPage);
+                this.storagePage = currentPage;
+                this.form.customCurrentPage = this.currentPage;
+            }
         });
     }
 
