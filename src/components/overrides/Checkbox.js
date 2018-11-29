@@ -1,21 +1,12 @@
 import SelectComponent from 'formiojs/components/checkbox/Checkbox';
 
 export default class CustomCheckboxComponent extends SelectComponent {
-    /**
-     * The purpose of this class is to override functionality from the native formio CheckBox component.
-     * @param form
-     */
-    constructor()
-    {
-        super.contructor();
-    }
 
     /**
      * Override the native createLabel method in the checkBox component to allow HTML to be rendered in the checkbox label.
      */
-    createLabel()
+    createLabel(container, input)
     {
-        Object.getPrototypeOf(this.checkbox).createLabel = function(container, input) {
             const isLabelHidden = this.labelIsHidden();
             let className = 'control-label form-check-label';
             if (this.component.input
