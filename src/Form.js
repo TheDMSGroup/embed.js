@@ -1,7 +1,8 @@
 import Formio from 'formiojs/Form';
 import URL from 'query-string';
 import Component from './components';
-import fetch from 'unfetch'
+import fetch from 'unfetch';
+
 import 'formiojs/dist/formio.form.min.css';
 
 class Form {
@@ -42,6 +43,8 @@ class Form {
         .then((json) => {
             // Always force the form to render a wizard
             json.display = 'wizard';
+            this.removeSpinner();
+            document.getElementById('studio').classList.add('ll');
             this.authToken = json.token;
             this.formId = json.formId;
             this.uuid = json.leadId;
@@ -106,26 +109,30 @@ class Form {
         .render()
         .then((form) => {
             this.form.instance = form;
-            this.removeSpinner();
-            document.getElementById('studio').classList.add('ll');
+            form.customCurrentPage = 0;
+
             new Component.trustedForm(form);
             let analytics = new Component.analytics();
             let jornaya = new Component.jornaya(form);
+            let history = new Component.history(form);
             jornaya.attachJornayaIdToTCPA();
             this.gaTrackerData = analytics.trackerData;
-            form.customCurrentPage = 0;
+
+            history.initialize();
 
             form.on('next', (payload) => {
-                if (this.isNotLastPage(form)) {
-                    analytics.pageProgressionEvent(form);
-                    jornaya.attachJornayaIdToTCPA();
-                    this.submitLeadData(payload.data, this.leadApiEndPoint);
-                } else {
-                    analytics.formCompletionEvent(form);
-                    jornaya.attachJornayaIdToTCPA();
-                    this.submitLeadData(payload.data, this.leadApiEndPoint)
-                    .then((response) => location.href = response.redirect_url);
-                }
+                analytics.pageProgressionEvent(form);
+                jornaya.attachJornayaIdToTCPA();
+                history.pageProgression().updateState();
+                this.submitLeadData(payload.data, this.leadApiEndPoint);
+            });
+
+            form.on('submitDone', (payload) => {
+                analytics.formCompletionEvent(form);
+                jornaya.attachJornayaIdToTCPA();
+                history.updateState();
+                this.submitLeadData(payload.data, this.leadApiEndPoint)
+                .then((response) => location.href = response.redirect_url);
             });
 
             form.on('nextButton', () => this.triggerFieldEvent(form).then(() => this.nextPage(form)));
@@ -150,7 +157,11 @@ class Form {
                 form.beforeNext().then(() => {
                     form.setPage(form.getNextPage(form.data, form.page));
                     form.customCurrentPage++;
-                    form.emit('next', { data: form.data });
+                    if (this.isNotLastPage(form)) {
+                        form.emit('next', { data: form.data });
+                    } else {
+                        form.emit('submitDone', { data: form.data });
+                    }
                 });
             };
 

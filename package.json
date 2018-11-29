@@ -8,11 +8,13 @@
     "currentscript": "^1.1.1",
     "dom-previous-element-sibling": "^1.0.0",
     "font-awesome": "^4.7.0",
-    "formiojs": "^3.8.0",
+    "formiojs": "^3.9.1",
     "get-js": "0.0.5",
+    "history": "^4.7.2",
     "query-string": "^5.1.1",
+    "store2": "^2.7.1",
     "unfetch": "^4.0.1",
-    "url-polyfill": "^1.1.0"
+    "url-polyfill": "^1.1.2"
   },
   "devDependencies": {
     "@babel/core": "^7.1.6",
@@ -22,13 +24,14 @@
     "babel-plugin-transform-class-properties": "^6.24.1",
     "css-loader": "^1.0.1",
     "file-loader": "^2.0.0",
+    "mocha": "^5.2.0",
     "style-loader": "^0.23.0",
     "url-loader": "^1.1.1",
-    "webpack": "^4.26.0",
+    "webpack": "^4.26.1",
     "webpack-cli": "^3.1.2"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha tests",
     "build": "webpack --mode production",
     "build-dev": "webpack --mode development",
     "watch": "webpack --watch"
