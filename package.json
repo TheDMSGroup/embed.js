@@ -8,13 +8,13 @@
     "currentscript": "^1.1.1",
     "dom-previous-element-sibling": "^1.0.0",
     "font-awesome": "^4.7.0",
-    "formiojs": "^3.9.0",
+    "formiojs": "^3.9.1",
     "get-js": "0.0.5",
     "history": "^4.7.2",
     "query-string": "^5.1.1",
     "store2": "^2.7.1",
     "unfetch": "^4.0.1",
-    "url-polyfill": "^1.1.1"
+    "url-polyfill": "^1.1.2"
   },
   "devDependencies": {
     "@babel/core": "^7.1.6",
