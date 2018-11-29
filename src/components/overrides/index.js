@@ -1,14 +1,14 @@
 import AllComponents from 'formiojs/components';
 import Components from 'formiojs/components/Components';
 
-import Checkbox from './Checkbox';
 import Button from "./Button";
 
+import CustomCheckboxComponent from './Checkbox';
 import SubmitSelectComponent from './Select';
 
 const init = () => {
-    new Checkbox(AllComponents.checkbox);
     new Button(AllComponents.button);
+    AllComponents.checkbox = CustomCheckboxComponent;
     AllComponents.select = SubmitSelectComponent;
     Components.setComponents(AllComponents);
 };
