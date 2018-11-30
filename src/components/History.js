@@ -78,7 +78,7 @@ export default class History {
      */
     get storeFormData()
     {
-        return this.store.get('form_session').data || null;
+        return this.store.get('form_session').data || {};
     }
 
     /**
@@ -113,8 +113,6 @@ export default class History {
             });
             this.form.customCurrentPage = this.currentPage;
         }
-        Object.assign(this.formData, this.storeFormData);
-        this.form.render();
 
         this.listen();
     }
@@ -132,13 +130,14 @@ export default class History {
             let currentPage = this.currentPage;
             // If this is true, we must of went backwards in the flow
             if (this.currentNaturalPage > this.currentHashedPage) {
-                currentPage = currentPage - 1;
+                currentPage = this.form.getPreviousPage();
             } else {
-                currentPage = currentPage + 1;
+                currentPage = this.form.getNextPage(false, currentPage);
             }
 
             if (this.currentNaturalPage !== this.currentHashedPage) {
                 this.form.setPage(currentPage);
+                this.form._seenPages = [...Array(currentPage).keys()];
                 this.storagePage = currentPage;
                 this.form.customCurrentPage = this.currentPage;
             }
@@ -147,7 +146,7 @@ export default class History {
 
     updateState()
     {        
-        this.store.set('form_session', { page: this.currentPage, data: this.form.data });
+        this.store.set('form_session', { page: this.currentPage, data: this.formData });
     }
     
 }
