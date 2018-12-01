@@ -299,7 +299,13 @@ class Form {
     {
         return new Promise(resolve => {
             FormioUtils.eachComponent(form.components, (component) => {
-                component.setInputMask(component.inputs[0]);
+                if (component.key && component.key.includes('phone') && !component.key.includes('consent')) {
+                    const phoneNumber = component.getValue();
+                    if (phoneNumber && phoneNumber[0] === '+' && phoneNumber.length === 12) {
+                        component.setValue(phoneNumber.slice(2, phoneNumber.length));
+                    }
+                    component.setInputMask(component.inputs[0]);
+                }
                 component.updateValue();
             });
             resolve();
