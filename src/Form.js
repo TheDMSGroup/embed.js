@@ -1,7 +1,8 @@
-import Formio from 'formiojs/Form';
+import Formio from 'formiojs/Wizard';
 import URL from 'query-string';
 import Component from './components';
 import fetch from 'unfetch';
+import _merge from 'lodash/merge';
 
 import 'formiojs/dist/formio.form.min.css';
 
@@ -18,6 +19,13 @@ class Form {
     constructor(config) {
         Component.override.init();
         this.form.config = config;
+        this.form.instance = new Formio(document.getElementById('studio'), {
+            submitOnEnter: true,
+            breadcrumbSettings: { clickable: false },
+            buttonSettings: { showCancel: false, showPrevious: false, showNext: false },
+            noAlerts: true,
+            namespace: 'studio'
+        });
         this.setUrl();
         this.setPageTitle();
         this.getFormJson();
@@ -42,13 +50,16 @@ class Form {
         .catch(error => console.error('Error:', error))
         .then((json) => {
             // Always force the form to render a wizard
-            json.display = 'wizard';
-            this.removeSpinner();
             document.getElementById('studio').classList.add('ll');
             this.authToken = json.token;
             this.formId = json.formId;
             this.uuid = json.leadId;
             this.externalCss = json.inline_css;
+
+            if (json.hasOwnProperty('error')) {
+                throw new Error(json.error);
+            }
+
             this.embedForm(json);
         });
     }
@@ -99,55 +110,52 @@ class Form {
      */
     embedForm(formJson)
     {
-        new Formio(document.getElementById('studio'), formJson, {
-            submitOnEnter: true,
-            breadcrumbSettings: { clickable: false },
-            buttonSettings: { showCancel: false, showPrevious: false, showNext: false },
-            noAlerts: true,
-            namespace: 'studio'
-        })
-        .render()
-        .then((form) => {
-            this.form.instance = form;
-            form.customCurrentPage = 0;
+        const formInstance = this.form.instance;
+        formInstance.form = formJson;
 
-            new Component.trustedForm(form);
-            let analytics = new Component.analytics();
-            let jornaya = new Component.jornaya(form);
-            let history = new Component.history(form);
+        const history = new Component.history(formInstance);
+        history.initialize();
+
+        formInstance.submission = {
+            data: _merge(history.storeFormData, this.form.payload)
+        };
+
+        const analytics = new Component.analytics();
+        const jornaya = new Component.jornaya(formInstance);
+        
+        this.gaTrackerData = analytics.trackerData;
+
+        formInstance.ready.then(() => {
+            formInstance.customCurrentPage = formInstance.page;
             jornaya.attachJornayaIdToTCPA();
-            this.gaTrackerData = analytics.trackerData;
-
-            history.initialize();
-
-            form.on('next', (payload) => {
-                analytics.pageProgressionEvent(form);
+            
+            formInstance.on('next', (payload) => {
+                analytics.pageProgressionEvent(formInstance);
                 jornaya.attachJornayaIdToTCPA();
                 history.pageProgression().updateState();
                 this.submitLeadData(payload.data, this.leadApiEndPoint);
             });
 
-            form.on('submitDone', (payload) => {
-                analytics.formCompletionEvent(form);
+            formInstance.on('submitDone', (payload) => {
+                analytics.formCompletionEvent(formInstance);
                 jornaya.attachJornayaIdToTCPA();
                 history.updateState();
                 this.submitLeadData(payload.data, this.leadApiEndPoint)
                 .then((response) => location.href = response.redirect_url);
             });
 
-            form.on('nextButton', () => this.triggerFieldEvent(form).then(() => this.nextPage(form)));
-        })
+            formInstance.on('nextButton', () => this.triggerFieldEvent().then(() => this.nextPage()));
+        });
     }
 
     /**
      * Override native form.io nextPage method in order to emit the "submit" event and validate specific fields
      * with xverify
-     * @param form
      * @returns {*}
      */
-    nextPage(form) {
+    nextPage() {
+        let form = this.form.instance;
         let xverify = new Component.xverify(this.form);
-
         if (form.checkValidity(form.data, true)) {
             form.checkData(form.data, {
                 noValidate: true
@@ -259,7 +267,7 @@ class Form {
     setUrlParams()
     {
         const urlParams = URL.parse(location.search);
-        Object.assign(this.form.payload, urlParams);
+        _merge(this.form.payload, urlParams);
     }
 
     /**
@@ -271,7 +279,7 @@ class Form {
     {
         return fetch(path, {
             method: 'POST',
-            body: JSON.stringify(Object.assign(parameters, this.form.payload)),
+            body: JSON.stringify(parameters),
             headers: {
                 'Content-Type': 'text/plain; charset=utf-8'
             }
@@ -281,22 +289,15 @@ class Form {
     }
 
     /**
-     * Hide Spinner UI Element
-     */
-    removeSpinner()
-    {
-        let element = document.getElementById('studio');
-        element.classList.remove('loader');
-    }
-
-    /**
      * This method is used for forcing input events to be triggered whenever we submit the form
      *
      * @param form
      * @returns {Promise}
      */
-    triggerFieldEvent(form)
+    triggerFieldEvent()
     {
+        let form = this.form.instance;
+    
         return new Promise(resolve => {
             FormioUtils.eachComponent(form.components, (component) => {
                 if (component.key && component.key.includes('phone') && !component.key.includes('consent')) {

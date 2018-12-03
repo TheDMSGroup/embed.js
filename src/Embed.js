@@ -19,7 +19,6 @@ class Embed
     {
         this.config = config;
         this.createEmbedElement().then((element) => {
-            this.addSpinner(element);
             new Form(this.config)
         });
     }
@@ -54,11 +53,6 @@ class Embed
             // Final fallback
             resolve(scripts[scripts.length - 1]);
         });
-    }
-
-    addSpinner(element)
-    {
-        element.className += 'loader';
     }
 
     getScriptSource(script)
