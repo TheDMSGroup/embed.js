@@ -21,8 +21,13 @@ npm install @ivanljutyj/embed.js
     <script src="dist/embed.js"></script>
     <script>crm.embed({ account: 'DMS', target: 1, url: 'http://studio.test' });</script>
 ```
-
 ### Config Options
 * account - REQUIRED
 * target|form - REQUIRED
 * url - OPTIONAL
+
+### Form Builder Embedding
+```html
+    <script src="dist/embed.js"></script>
+    <script>crm.build();</script>
+```
