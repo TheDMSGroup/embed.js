@@ -3,26 +3,21 @@ import FormBuilder from 'formiojs/FormBuilder';
 import Dictionary from './components/Dictionary';
 
 export default class Builder {
-    constructor() {
+    constructor(form = {}) {
+        this.json = form;
         Component.override.init();
         this.dictionary = new Dictionary();
-        this.createEmbedElement()
-        .then(element => this.render(element))
-    }
-
-    get components() {
-        return this.builder.instance.groups;
+        this.createEmbedElement().then(element => this.render(element))
     }
 
     render(element) {
-        this.dictionary.get()
-        .then(dictionary => {
-            this.builder = new FormBuilder(element, this.getJson(), dictionary);
+        this.dictionary.get().then(dictionary => {
+            this.builder = new FormBuilder(element, this.json, dictionary);
             this.builder.render().then(builder => {
+                this.hideFormBuilderComponents();
                 this.createSearchBox();
             })
         });
-
     }
 
     /**
@@ -31,48 +26,33 @@ export default class Builder {
     createEmbedElement()
     {
         return new Promise((resolve) => {
-            const script = document.currentScript;
-            let element = document.createElement('div');
-            element.id = 'studio';
-            script.parentNode.insertBefore(element, script.nextSibling);
-            resolve(element);
+            resolve(document.currentScript.parentNode
+                .insertBefore(document.createElement('div'), document.currentScript.nextSibling)
+            );
         });
     }
 
-    getJson() {
-        return { display: "wizard" };
-    }
-
     /**
-     * Find the engage field component in the dom tree and return the result.
+     * Filter components based on searchText from the search
      *
      * @param searchText
-     * @returns {*}
      */
-    findComponent(searchText) {
-        let formBuilderComponents = this.getFormBuilderComponents();
-        let filteredFormBuilderComponents = formBuilderComponents.filter(attribute => attribute.key.includes(searchText));
-
-        if (searchText.length >= 1) {
-            this.hideFormBuilderComponents(formBuilderComponents);
-        }
-
-        if (searchText.length === 0) {
-            this.showFormBuilderComponents(formBuilderComponents)
-        }
-
-        return filteredFormBuilderComponents;
+    filterComponents(searchText) {
+        this.showFormBuilderComponents(this.formBuilderComponents
+            .filter(attribute => attribute.key.includes(searchText))
+        );
     }
 
-    hideFormBuilderComponents(formBuilderComponents) {
-        for (let formBuilderComponent in formBuilderComponents) {
-            if (formBuilderComponents.hasOwnProperty(formBuilderComponent)) {
-                formBuilderComponents[formBuilderComponent].element.style.display = 'none';
+    hideFormBuilderComponents() {
+        for (let formBuilderComponent in this.formBuilderComponents) {
+            if (this.formBuilderComponents.hasOwnProperty(formBuilderComponent)) {
+                this.formBuilderComponents[formBuilderComponent].element.style.display = 'none';
             }
         }
     }
 
     showFormBuilderComponents(formBuilderComponents) {
+        this.hideFormBuilderComponents();
         for (let formBuilderComponent in formBuilderComponents) {
             if (formBuilderComponents.hasOwnProperty(formBuilderComponent)) {
                 formBuilderComponents[formBuilderComponent].element.style.display = 'block';
@@ -80,28 +60,36 @@ export default class Builder {
         }
     }
 
-    createSearchBox() {
+    /**
+     * Create a search box and inject it into the form builder.
+     */
+    createSearchBox() {    
         let questions = this.components.questions.panel.firstChild;
         let search = document.createElement('input');
         search.type = 'text';
-        search.id = 'findComponent';
         search.className = 'form-control';
         search.placeholder = 'Search...';
         questions.prepend(search);
-        
-        // By default hide all the components
-        this.hideFormBuilderComponents(this.getFormBuilderComponents());
-
-        search.oninput = (event) => {
-            let result = this.findComponent(event.target.value);
-            this.showFormBuilderComponents(result);
-        };
+        search.oninput = (element) => this.filterComponents(element.target.value);
     }
 
     /**
      * Return all the Engage components
      */
-    getFormBuilderComponents() {
+    get formBuilderComponents() {
         return this.components.questions.components;
+    }
+
+    get components() {
+        return this.builder.instance.groups;
+    }
+
+    get json() {
+        this.form.display = 'wizard';
+        return this.form;
+    }
+
+    set json(form) {
+        this.form = form;
     }
 }
