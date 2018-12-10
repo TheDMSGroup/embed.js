@@ -1,6 +1,7 @@
 import Component from './components'
 import FormBuilder from 'formiojs/FormBuilder';
 import Dictionary from './components/Dictionary';
+import Formio from 'formiojs/Formio';
 
 export default class Builder {
     constructor(form = {}) {
@@ -12,6 +13,7 @@ export default class Builder {
 
     render(element) {
         this.dictionary.get().then(dictionary => {
+            Formio.icons = 'fontawesone';
             this.builder = new FormBuilder(element, this.json, dictionary);
             this.builder.render().then(builder => {
                 this.hideFormBuilderComponents();
@@ -60,9 +62,6 @@ export default class Builder {
         }
     }
 
-    /**
-     * Create a search box and inject it into the form builder.
-     */
     createSearchBox() {    
         let questions = this.components.questions.panel.firstChild;
         let search = document.createElement('input');
@@ -73,9 +72,6 @@ export default class Builder {
         search.oninput = (element) => this.filterComponents(element.target.value);
     }
 
-    /**
-     * Return all the Engage components
-     */
     get formBuilderComponents() {
         return this.components.questions.components;
     }
