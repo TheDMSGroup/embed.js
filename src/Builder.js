@@ -22,6 +22,9 @@ export default class Builder {
         });
     }
 
+    /**
+     * Create the embed element where we will inject our Formio instance
+     */
     createEmbedElement()
     {
         return new Promise((resolve) => {
@@ -31,6 +34,11 @@ export default class Builder {
         });
     }
 
+    /**
+     * Filter components based on searchText from the search
+     *
+     * @param searchText
+     */
     filterComponents(searchText) {
         this.showFormBuilderComponents(this.formBuilderComponents
             .filter(attribute => attribute.key.includes(searchText))
