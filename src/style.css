@@ -1,26 +1,76 @@
-#studio.loader {
-    border: 8px solid #f3f3f3;
-    border-radius: 50%;
-    border-top: 8px solid #3498db;
-    width: 60px;
-    height: 60px;
-    -webkit-animation: spin 2s linear infinite; /* Safari */
-    animation: spin 2s linear infinite;
-    margin: 10% auto;
-}
-
 /* Hide the native form progression buttons */
 #studio ul.list-inline {
     display: none;
 }
-
-/* Safari */
-@-webkit-keyframes spin {
-    0% { -webkit-transform: rotate(0deg); }
-    100% { -webkit-transform: rotate(360deg); }
+.formbuilder .formcomponent,
+.formbuilder.formcomponent:hover,
+.formbuilder.formcomponent:active,
+.formbuilder.formcomponent:focus {
+    background-color: #e9f0f6;
+    color: #393939;
+    border: transparent;
 }
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+.formbuilder button.btn.btn-block.builder-group-button {
+    text-transform: uppercase;
+    font-weight: bolder;
+    font-size: 14px;
+}  
+.formbuilder .formcomponent {
+    background-color: #e9f0f6;
+}
+.formbuilder .formcomponents .panel-collapse, .formbuilder .formcomponents .builder-group-button {
+    background-color: #e9f0f6;
+}
+.formbuilder .formcomponents .form-builder-panel {
+    margin-bottom: 10px;
+}
+.formbuilder .formcomponents {
+    color: #61666c;
+}
+.formbuilder .formcomponents .form-builder-group-header {
+    border-bottom: none;
+}
+.formbuilder .formcomponents .panel-collapse, .formbuilder .formcomponents .builder-group-button:focus {
+    box-shadow: none;
+}
+.formbuilder .formcomponents .accordion .card {
+    border: 1px solid rgba(0,0,0,0.125) !important;
+}
+.formbuilder .formcomponents .btn {
+    padding: 0.75rem 1rem;
+    color: #61666c;
+}
+.formbuilder .formcomponents .accordion .card {
+    border-radius: 5px !important;
+}
+.formbuilder .formcomponents .btn:not(:disabled):not(.disabled):active {
+    background-color:#dfe8f1;
+    color:#848484;
+}
+.formbuilder .formarea .card-header {
+    padding: 0.50rem 0.4rem;
+    border-bottom: none;
+    background-color: transparent;
+}
+.formbuilder .formarea .card-title {
+    background-color: #f3f3f3;
+    padding: 2px 12px;
+    border-radius: 4px;
+    letter-spacing: 0;
+    display: inline;
+}
+.formbuilder .formarea .border {
+    border-radius: 5px;
+}
+.formbuilder .formarea .component-btn-group {
+    margin-top: 0px;
+}
+.gu-mirror {
+    background-color: #e9f0f6 !important;
+    color: #858a90 !important;
+    text-align: left !important;
+    border: 1px solid rgba(0,0,0,0.125) !important;
+    -webkit-box-shadow: 3px 3px 5px 0px rgba(0,0,0,0.5);
+    -moz-box-shadow: 3px 3px 5px 0px rgba(0,0,0,0.5);
+    box-shadow: 3px 3px 5px 0px rgba(0,0,0,0.5);
 }
