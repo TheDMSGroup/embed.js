@@ -6,20 +6,35 @@
 .formbuilder.formcomponent:hover,
 .formbuilder.formcomponent:active,
 .formbuilder.formcomponent:focus {
-    background-color: #e9f0f6;
-    color: #393939;
-    border: transparent;
+    background-color: #e9f0f5;
+    color: #666;
+    border-top: transparent;
+    border-right: transparent;
+    border-left: transparent;
+    border-bottom: 1px solid #ddd;
+    font-size: 16px;
+    border-radius: 0;
 }
+.formbuilder .formcomponent:last-child,
+.formbuilder.formcomponent:hover:last-child,
+.formbuilder.formcomponent:active:last-child,
+.formbuilder.formcomponent:focus:last-child {
+    border:transparent;
+}
+
+
 .formbuilder button.btn.btn-block.builder-group-button {
     text-transform: uppercase;
     font-weight: bolder;
-    font-size: 14px;
+    letter-spacing: 1px;
+    font-weight: 400;
+    font-size: 12px;
 }  
 .formbuilder .formcomponent {
-    background-color: #e9f0f6;
+    background-color: #e9f0f5;
 }
 .formbuilder .formcomponents .panel-collapse, .formbuilder .formcomponents .builder-group-button {
-    background-color: #e9f0f6;
+    background-color: #e9f0f5;
 }
 .formbuilder .formcomponents .form-builder-panel {
     margin-bottom: 1rem;
@@ -37,7 +52,6 @@
     border: 1px solid rgba(0,0,0,0.125) !important;
 }
 .formbuilder .formcomponents .btn {
-    padding: 0.75rem 1rem;
     color: #61666c;
 }
 .formbuilder .formcomponents .accordion .card {
@@ -66,7 +80,7 @@
     margin-top: 0px;
 }
 .gu-mirror {
-    background-color: #e9f0f6 !important;
+    background-color: #e9f0f5 !important;
     color: #858a90 !important;
     text-align: left !important;
     border: 1px solid rgba(0,0,0,0.125) !important;

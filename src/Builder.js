@@ -8,29 +8,17 @@ export default class Builder {
         this.json = form;
         Component.override.init();
         this.dictionary = new Dictionary();
-        this.createEmbedElement().then(element => this.render(element))
+        this.render();
     }
-
-    render(element) {
+    
+    render() {
         this.dictionary.get().then(dictionary => {
             Formio.icons = 'fontawesone';
-            this.builder = new FormBuilder(element, this.json, dictionary);
+            this.builder = new FormBuilder(document.getElementById('studio'), this.json, dictionary);
             this.builder.render().then(builder => {
                 this.hideFormBuilderComponents();
                 this.createSearchBox();
             })
-        });
-    }
-
-    /**
-     * Create the embed element where we will inject our Formio instance
-     */
-    createEmbedElement()
-    {
-        return new Promise((resolve) => {
-            resolve(document.currentScript.parentNode
-                .insertBefore(document.createElement('div'), document.currentScript.nextSibling)
-            );
         });
     }
 
