@@ -2,6 +2,7 @@ import Component from './components'
 import FormBuilder from 'formiojs/FormBuilder';
 import Dictionary from './components/Dictionary';
 import Formio from 'formiojs/Formio';
+import 'formiojs/dist/formio.builder.css';
 
 export default class Builder {
     constructor(form = {}) {
@@ -10,7 +11,7 @@ export default class Builder {
         this.dictionary = new Dictionary();
         this.render();
     }
-    
+
     render() {
         this.dictionary.get().then(dictionary => {
             Formio.icons = 'fontawesone';

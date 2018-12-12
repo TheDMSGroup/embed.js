@@ -6,15 +6,11 @@ export default class Dictionary {
      * Get the Engage dictionary
      */
     get() {
-        return fetch(this.baseUrl + '/api/v1/engage/dictionary')
+        return fetch(location.origin + '/api/v1/dictionary')
         .catch(error => console.error(error))
         .then(response => response.json())
         .then(json => this.createCustomComponent(json))
         .then(dictionary => this.buildOptions(dictionary))
-    }
-
-    get baseUrl() {
-        return new URL(document.currentScript.previousElementSibling.src).origin;
     }
 
     createCustomComponent(dictionaryData) {
