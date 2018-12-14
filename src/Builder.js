@@ -9,16 +9,18 @@ export default class Builder {
         this.json = form;
         Component.override.init();
         this.dictionary = new Dictionary();
-        this.render();
     }
 
     render() {
-        this.dictionary.get().then(dictionary => {
+        return this.dictionary.get()
+        .then(dictionary => {
             Formio.icons = 'fontawesone';
             this.builder = new FormBuilder(document.getElementById('studio'), this.json, dictionary);
-            this.builder.render().then(builder => {
+            return this.builder.render()
+            .then(builder => {
                 this.hideFormBuilderComponents();
                 this.createSearchBox();
+                return builder;
             })
         });
     }
