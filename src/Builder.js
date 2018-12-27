@@ -5,8 +5,6 @@ import Formio from 'formiojs/Formio';
 import 'formiojs/dist/formio.builder.css';
 
 import Components from 'formiojs/components/Components';
-import EventEmitter from 'events';
-import BuilderUtils from 'formiojs/utils/builder'
 
 export default class Builder {
     constructor(form = {}) {
@@ -94,11 +92,7 @@ export default class Builder {
                 this.preview.destroy();
             }
             this.preview = Components.create(component.component, {
-            preview: true,
-            events: new EventEmitter({
-                wildcard: false,
-                maxListeners: 0
-            })
+                preview: true
             }, {}, true);
             this.preview.on('componentEdit', (comp) => {
                 _.merge(component.component, comp.component);
@@ -119,9 +113,6 @@ export default class Builder {
                 component.component.type
                 );
             }
-
-            // Set a unique key for this component.
-            BuilderUtils.uniquify(this._form, component.component);
         }
   
         // Change the "default value" field to be reflective of this component.
