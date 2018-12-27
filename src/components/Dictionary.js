@@ -38,7 +38,7 @@ export default class Dictionary {
                         "icon": "fa fa-terminal",
                         "schema": {
                             "label": labelCleaned,
-                            "customKey": key,
+                            "lockKey": true,
                             "type": this.determineType(type),
                             "key": key,
                             "validate": {"required": true},
@@ -67,9 +67,9 @@ export default class Dictionary {
                         "title": "First Name",
                         "key": "firstname",
                         "schema": {
-                            "label": "First name",
+                            "label": "First Name",
                             "key": "firstname",
-                            "customKey": "firstname",
+                            "lockKey": true,
                             "type": "textfield",
                             "validate": {"required": true},
                             "input": true
@@ -80,8 +80,9 @@ export default class Dictionary {
                         "title": "Last Name",
                         "key": "lastname",
                         "schema": {
-                            "label": "Lastname",
+                            "label": "Last Name",
                             "key": "lastname",
+                            "lockKey": true,
                             "customKey": "lastname",
                             "type": "textfield",
                             "validate": {"required": true},
@@ -95,7 +96,7 @@ export default class Dictionary {
                         "schema": {
                             "label": "Email",
                             "key": "email",
-                            "customKey": "email",
+                            "lockKey": true,
                             "type": "email",
                             "validate": {"required": true},
                             "input": true
@@ -108,7 +109,7 @@ export default class Dictionary {
                         "schema": {
                             "label": "Phone",
                             "key": "phone",
-                            "customKey": "phone",
+                            "lockKey": true,
                             "inputMask": "(999) 999-9999",
                             "type": "textfield",
                             "validate": {"required": true},
@@ -122,7 +123,7 @@ export default class Dictionary {
                         "schema": {
                             "label": "Address",
                             "key": "address1",
-                            "customKey": "address1",
+                            "lockKey": true,
                             "type": "textfield",
                             "validate": {"required": true},
                             "input": true
@@ -135,7 +136,7 @@ export default class Dictionary {
                         "schema": {
                             "label": "Zip Code",
                             "key": "zipcode",
-                            "customKey": "zipcode",
+                            "lockKey": true,
                             "inputMask": "99999",
                             "type": "textfield",
                             "validate": {"required": true},
