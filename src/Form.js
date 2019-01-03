@@ -3,6 +3,7 @@ import URL from 'query-string';
 import Component from './components';
 import fetch from 'unfetch';
 import _merge from 'lodash/merge';
+import store from 'store2';
 
 import 'formiojs/dist/formio.form.min.css';
 
@@ -26,6 +27,8 @@ class Form {
             noAlerts: true,
             namespace: 'studio'
         });
+        this.uuid = store.has('crm.uuid') ? store.get('crm.uuid') : '';
+        this.formId = store.has('crm.formid') ? store.get('crm.formid') : 0;
         this.setUrl();
         this.setPageTitle();
         this.getFormJson();
@@ -52,8 +55,8 @@ class Form {
             // Always force the form to render a wizard
             document.getElementById('studio').classList.add('ll');
             this.authToken = json.token;
-            this.formId = json.formId;
-            this.uuid = json.leadId;
+            this.uuid = store.has('crm.uuid') ? store.get('crm.uuid') : store.set('crm.uuid', json.leadId) && json.leadId;
+            this.formId = store.has('crm.formid') ? store.get('crm.formid') : store.set('crm.formid', json.formId) && json.formId;
             this.externalCss = json.inline_css;
 
             if (json.hasOwnProperty('error')) {

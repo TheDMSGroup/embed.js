@@ -1,6 +1,6 @@
 {
   "name": "@ivanljutyj/embed.js",
-  "version": "1.1.8",
+  "version": "1.1.9",
   "description": "Embed implementation for the Studio CRM product",
   "main": "dist/embed.js",
   "dependencies": {
@@ -8,7 +8,7 @@
     "currentscript": "^1.1.1",
     "dom-previous-element-sibling": "^1.0.0",
     "font-awesome": "^4.7.0",
-    "formiojs": "^3.10.1",
+    "formiojs": "^3.10.2",
     "get-js": "0.0.5",
     "history": "^4.7.2",
     "query-string": "^5.1.1",
@@ -27,8 +27,8 @@
     "mocha": "^5.2.0",
     "style-loader": "^0.23.0",
     "url-loader": "^1.1.1",
-    "webpack": "^4.28.2",
-    "webpack-cli": "^3.1.2"
+    "webpack": "^4.28.3",
+    "webpack-cli": "^3.2.0"
   },
   "scripts": {
     "test": "mocha tests",
