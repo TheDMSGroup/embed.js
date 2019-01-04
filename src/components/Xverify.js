@@ -27,11 +27,11 @@ class Xverify
 
     needsToBeValidated(payload)
     {
-        if (this.extractFormSetting('verify_phone') && payload.hasOwnProperty('phone') && !payload.hasOwnProperty('phone_valid')) {
+        if (payload.hasOwnProperty('phone') && !payload.hasOwnProperty('phone_valid')) {
             return true;
         }
 
-        if (this.extractFormSetting('verify_email') && payload.hasOwnProperty('email') && !payload.hasOwnProperty('email_valid')) {
+        if (payload.hasOwnProperty('email') && !payload.hasOwnProperty('email_valid')) {
             return true;
         }
 

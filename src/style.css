@@ -77,3 +77,6 @@
 #studio .drag-container {
     margin: 10px;
 }
+#studio .col.drag-container {
+    margin: -1px;
+}
