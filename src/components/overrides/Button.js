@@ -291,4 +291,10 @@ export default class CustomButtonComponent extends BaseComponent {
     getValue() {
         return this.dataValue;
     }
+
+    get className() {
+        let className = super.className;
+        className += ' form-group';
+        return className;
+    }
 }
