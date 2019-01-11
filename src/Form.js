@@ -27,8 +27,12 @@ class Form {
             noAlerts: true,
             namespace: 'studio'
         });
-        this.uuid = store.has('crm.uuid') ? store.get('crm.uuid') : '';
-        this.formId = store.has('crm.formid') ? store.get('crm.formid') : 0;
+        if (store.has('crm.uuid')) {
+            this.uuid = store.get('crm.uuid');
+        }
+        if (store.has('crm.formid')) {
+            this.formId = store.get('crm.formid');
+        }
         this.setUrl();
         this.setPageTitle();
         this.getFormJson();
@@ -55,8 +59,10 @@ class Form {
             // Always force the form to render a wizard
             document.getElementById('studio').classList.add('ll');
             this.authToken = json.token;
-            this.uuid = store.has('crm.uuid') ? store.get('crm.uuid') : store.set('crm.uuid', json.leadId) && json.leadId;
-            this.formId = store.has('crm.formid') ? store.get('crm.formid') : store.set('crm.formid', json.formId) && json.formId;
+            store.set('crm.uuid', json.leadId);
+            store.set('crm.formid', json.formId)
+            this.uuid = json.leadId;
+            this.formId = json.formId;
             this.externalCss = json.inline_css;
 
             if (json.hasOwnProperty('error')) {
@@ -144,11 +150,22 @@ class Form {
                 jornaya.attachJornayaIdToTCPA();
                 history.updateState();
                 this.submitLeadData(payload.data, this.leadApiEndPoint)
-                .then((response) => location.href = response.redirect_url);
+                .then((response) => this.handleRedirect(response));
             });
 
             formInstance.on('nextButton', () => this.triggerFieldEvent().then(() => this.nextPage()));
         });
+    }
+
+    handleRedirect(form) {
+        if (form.use_html_redirect) {
+            let embedElement = document.getElementById('studio');
+            embedElement.innerHTML = form.html || "Thank you for your submission.";
+        } else if (form.redirect_url) {
+            location.href = form.redirect_url;
+        }
+
+        store.clearAll();
     }
 
     /**
