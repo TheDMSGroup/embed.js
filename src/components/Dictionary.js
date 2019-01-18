@@ -147,7 +147,8 @@ export default class Dictionary {
                     "button": true,
                     "hidden": true,
                     "select": true,
-                    "selectboxes": true
+                    "selectboxes": true,
+                    "slider": true
                 }
             }
         }
