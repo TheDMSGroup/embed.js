@@ -108,9 +108,11 @@ class Form {
         document.getElementsByTagName('head')[0].appendChild(style);
     }
 
-    set gaTrackerData(ga)
+    set gaTrackerData(data)
     {
-        this.form.payload.ga = ga;
+        this.form.instance.data = {...this.form.instance.data, ...{
+            ga: data
+        }};
     }
 
     /**
@@ -125,16 +127,16 @@ class Form {
         const history = new Component.history(formInstance);
         history.initialize();
 
+        const analytics = new Component.analytics();
+        const jornaya = new Component.jornaya(formInstance);
+
         formInstance.submission = {
             data: _merge(history.storeFormData, this.form.payload)
         };
 
-        const analytics = new Component.analytics();
-        const jornaya = new Component.jornaya(formInstance);
-        
-        this.gaTrackerData = analytics.trackerData;
-
         formInstance.ready.then(() => {
+            this.gaTrackerData = analytics.trackerData();
+
             formInstance.customCurrentPage = formInstance.page;
             jornaya.attachJornayaIdToTCPA();
             
