@@ -3,7 +3,7 @@ import Components from 'formiojs/components/Components';
 
 import CustomButtonComponent from "./Button";
 import ButtonForm from 'formiojs/components/button/Button.form';
-import TextFieldForm from 'formiojs/components/textfield/TextField.form';
+import SliderForm from './Slider.form';
 import CustomCheckboxComponent from './Checkbox';
 import SubmitSelectComponent from './Select';
 import CustomSliderComponent from './Slider';
@@ -14,7 +14,7 @@ const init = () => {
     AllComponents.checkbox = CustomCheckboxComponent;
     AllComponents.select = SubmitSelectComponent;
     AllComponents.slider = CustomSliderComponent;
-    AllComponents.slider.editForm = TextFieldForm;
+    AllComponents.slider.editForm = SliderForm;
     Components.setComponents(AllComponents);
 };
 
