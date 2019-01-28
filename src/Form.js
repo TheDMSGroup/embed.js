@@ -108,9 +108,11 @@ class Form {
         document.getElementsByTagName('head')[0].appendChild(style);
     }
 
-    set gaTrackerData(ga)
+    set gaTrackerData(data)
     {
-        this.form.payload.ga = ga;
+        this.form.instance.data = {...this.form.instance.data, ...{
+            ga: data
+        }};
     }
 
     /**
@@ -125,18 +127,22 @@ class Form {
         const history = new Component.history(formInstance);
         history.initialize();
 
+        const analytics = new Component.analytics();
+        const jornaya = new Component.jornaya(formInstance);
+
         formInstance.submission = {
             data: _merge(history.storeFormData, this.form.payload)
         };
 
-        const analytics = new Component.analytics();
-        const jornaya = new Component.jornaya(formInstance);
-        
-        this.gaTrackerData = analytics.trackerData;
-
         formInstance.ready.then(() => {
-            formInstance.customCurrentPage = formInstance.page;
-            jornaya.attachJornayaIdToTCPA();
+            formInstance.on('formLoad', () => {
+                this.gaTrackerData = analytics.trackerData();
+                formInstance.customCurrentPage = formInstance.page;
+            });
+
+            formInstance.on('render', () => {
+                jornaya.attachJornayaIdToTCPA();
+            })
             
             formInstance.on('next', (payload) => {
                 analytics.pageProgressionEvent(formInstance);
@@ -153,7 +159,7 @@ class Form {
                 .then((response) => this.handleRedirect(response));
             });
 
-            formInstance.on('nextButton', () => this.triggerFieldEvent().then(() => this.nextPage()));
+            formInstance.on('nextButton', (payload) => this.triggerFieldEvent().then(() => this.nextPage(payload)));
         });
     }
 
@@ -173,8 +179,9 @@ class Form {
      * with xverify
      * @returns {*}
      */
-    nextPage() {
+    nextPage(payload) {
         let form = this.form.instance;
+        form.data = { ...form.data, ...payload.data };
         let xverify = new Component.xverify(this.form);
         if (form.checkValidity(form.data, true)) {
             form.checkData(form.data, {
@@ -183,7 +190,7 @@ class Form {
 
             const goToNextPage = () => {
                 form.beforeNext().then(() => {
-                    form.setPage(form.getNextPage(form.data, form.page));
+                    form.setPage(form.getNextPage(form.data, form.page)).catch((error) => {});
                     form.customCurrentPage++;
                     if (this.isNotLastPage(form)) {
                         form.emit('next', { data: form.data });

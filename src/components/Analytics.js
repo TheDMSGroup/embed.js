@@ -55,37 +55,31 @@ export default class Analytics
      *
      * @returns {{trackingId, userId, clientId...}}
      */
-    get trackerData() {
-        let result = {},
-        keys = [
-            'adSenseId', 'clientId', 'clientIdTime',
-            'location', 'name', 'screenColors',
-            'screenResolution', 'trackingId', 'userId',
-            'viewportSize'
-        ];
-
-        if (typeof window.ga === 'function' &&
-            typeof window.ga.getAll === 'function') {
-            let trackers = window.ga.getAll();
-            for (let t in trackers) {
-                if (
-                    trackers.hasOwnProperty(t) &&
-                    typeof trackers[t] === 'object' &&
-                    typeof trackers[t].get === 'function') {
+    trackerData() {
+            let result = {},
+            keys = [
+                'adSenseId', 'clientId', 'clientIdTime',
+                'location', 'name', 'screenColors',
+                'screenResolution', 'trackingId', 'userId',
+                'viewportSize'
+            ];
+            if (typeof window.ga === 'function' &&
+                typeof window.ga.getAll === 'function') {
+                let trackers = window.ga.getAll();
+                for (let t in trackers) {
                     result[t] = {};
-                    try {
+                    if (
+                        trackers.hasOwnProperty(t) &&
+                        typeof trackers[t] === 'object' &&
+                        typeof trackers[t].get === 'function'
+                    ) {
                         for (let k in keys) {
-                            if (keys.hasOwnProperty(k)) {
-                                // if (k === 'location') {
-                                // @todo - append/merge aggregated GET params to ensure realtime accuracy if they do not cause secondary sessions.
-                                // }
-                                result[t][keys[k]] = trackers[t].get(keys[k]);
-                            }
+                            result[t][keys[k]] = trackers[t].get(keys[k]);                
                         }
-                    } catch (e) {}
+                    }
                 }
             }
-        }
+
         return result;
     }
 }
