@@ -17,7 +17,7 @@ export default class SliderComponent extends BaseComponent {
       static get builderInfo() {
         return {
           title: 'Slider',
-          icon: 'fa fa-slider',
+          icon: 'fa fa-ellipsis-h',
           group: 'basic',
           weight: 0,
           schema: SliderComponent.schema()
