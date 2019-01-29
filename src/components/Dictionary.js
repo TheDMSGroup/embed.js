@@ -29,19 +29,42 @@ export default class Dictionary {
                 let key = dictionaryData[dictionaryField].attribute_alias;
                 let label = dictionaryData[dictionaryField].attribute_label;
                 let type = dictionaryData[dictionaryField].type;
+                let properties = JSON.parse(dictionaryData[dictionaryField].properties);
                 let labelCleaned = this.toTitleCase(this.removeCategoryFrom(label));
+                
+                customComponents[key] = { 
+                    schema: { 
+                        data: {} 
+                    }    
+                };
 
+                if (this.determineType(type) === 'select') {
+                    let values = [];
+                    Object.keys(properties.list).forEach((key) => {
+                        if (typeof properties.list[key] === 'object') {
+                            values.push(properties.list[key])
+                        }
+                    });
+
+                    customComponents[key].schema.data = {
+                        values: values,
+                        valueProperty: "value",
+                        dataSrc: "values"
+                    };
+                }
+                
                 customCategories['questions'].components.push(
                     customComponents[key] = {
-                        "title": labelCleaned,
-                        "key": key,
-                        "icon": "fa fa-terminal",
-                        "schema": {
-                            "label": labelCleaned,
-                            "lockKey": true,
-                            "type": this.determineType(type),
-                            "key": key,
-                            "validate": {"required": true},
+                        title: labelCleaned,
+                        key: key,
+                        icon: "fa fa-terminal",
+                        schema: {
+                            ...customComponents[key].schema,
+                            label: labelCleaned,
+                            lockKey: true,
+                            type: this.determineType(type),
+                            key: key,
+                            validate: { required: true }
                         }
                     }
                 );
@@ -158,23 +181,19 @@ export default class Dictionary {
         switch (type) {
             case 'text':
                 return 'textfield';
-                break;
             case 'boolean':
                 return 'checkbox';
-                break;
             case 'tel':
                 return 'phoneNumber';
-                break;
             case 'textarea':
                 return 'htmlelement';
-                break;
             case 'date':
                 return 'datetime';
-                break;
+            case 'selectboxes':
+                return 'select';
             case 'number':
             case 'email':
             case 'select':
-            case 'selectboxes':
             case 'signature':
             case 'time':
             case 'file':
@@ -184,10 +203,8 @@ export default class Dictionary {
             case 'radio':
             case 'currency':
                 return type;
-                break;
             default:
                 return 'textfield';
-                break;
         }
     }
 
