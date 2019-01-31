@@ -40,11 +40,13 @@ export default class Dictionary {
 
                 if (this.determineType(type) === 'select') {
                     let values = [];
-                    Object.keys(properties.list).forEach((key) => {
-                        if (typeof properties.list[key] === 'object') {
-                            values.push(properties.list[key])
-                        }
-                    });
+                    if (properties.hasOwnProperty('list')) {
+                        Object.keys(properties.list).forEach((key) => {
+                            if (typeof properties.list[key] === 'object') {
+                                values.push(properties.list[key])
+                            }
+                        });
+                    }
 
                     customComponents[key].schema.data = {
                         values: values,
