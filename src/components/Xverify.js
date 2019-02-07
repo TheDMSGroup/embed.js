@@ -42,14 +42,19 @@ class Xverify
     {
         let xverifyPayload = {};
 
-        if (this.extractFormSetting('verify_email') && payload.hasOwnProperty('email') && payload.email !== '') {
+        if (this.extractFormSetting('verify_email') === null) {
             xverifyPayload['email'] = payload.email;
         }
-        if (this.extractFormSetting('verify_phone') && payload.hasOwnProperty('phone') && payload.phone !== '') {
-            xverifyPayload['phone_cell'] = payload.phone;
+        if (this.extractFormSetting('verify_phone') === null) {
+            xverifyPayload['phone'] = payload.phone;
         }
 
-        let remapField = { phone_cell: 'phone', email: 'email' };
+        if (this.extractFormSetting('verify_email') && payload.hasOwnProperty('email')) {
+            xverifyPayload['email'] = payload.email;
+        }
+        if (this.extractFormSetting('verify_phone') && payload.hasOwnProperty('phone')) {
+            xverifyPayload['phone'] = payload.phone;
+        }
 
         return fetch(this.xverifyApiEndpoint, {
             method: 'POST',
@@ -65,12 +70,12 @@ class Xverify
                if (!fieldResult.valid) {
                    FormioUtils.getComponent(
                        this.form.instance.components,
-                       remapField[fieldKey]
+                       fieldKey
                    ).setCustomValidity(fieldResult.message, true);
 
                    errors.push(fieldResult.message);
                } else {
-                   payload[remapField[fieldKey] + '_valid'] = true;
+                   payload[fieldKey + '_valid'] = true;
                }
             });
             if (errors.length > 0) {
