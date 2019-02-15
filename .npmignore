@@ -1,0 +1,6 @@
+dist/*.svg
+dist/*.eot
+dist/*.ttf
+index.html
+.vscode
+.idea
