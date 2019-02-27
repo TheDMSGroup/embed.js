@@ -627,6 +627,7 @@ export default class SubmitSelectComponent extends BaseComponent {
             searchPlaceholderValue: this.t('Type to search'),
             position: (this.component.dropdown || 'auto'),
             searchEnabled: useSearch,
+            shouldSort: customOptions.shouldSort || false,
             searchChoices: !this.component.searchField,
             searchFields: _.get(this, 'component.searchFields', ['label']),
             fuseOptions: Object.assign({
