@@ -58,6 +58,7 @@ class Form {
         .then((json) => {
             // Always force the form to render a wizard
             document.getElementById('studio').classList.add('ll');
+            this.authToken = json.token;
             store.set('crm.uuid', json.leadId);
             store.set('crm.formid', json.formId)
             this.uuid = json.leadId;
@@ -83,6 +84,11 @@ class Form {
     setPageTitle()
     {
         this.form.payload['meta_title'] = document.getElementsByTagName('title')[0].innerText || '';
+    }
+
+    set authToken(token)
+    {
+        this.form.payload['X-Authorization'] = token;
     }
 
     set formId(formId)
