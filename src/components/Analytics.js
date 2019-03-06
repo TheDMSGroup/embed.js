@@ -63,8 +63,8 @@ export default class Analytics
                 'screenResolution', 'trackingId', 'userId',
                 'viewportSize'
             ];
-            if (typeof window.ga === 'function' &&
-                typeof window.ga.getAll === 'function') {
+
+            ga(() => {
                 let trackers = window.ga.getAll();
                 for (let t in trackers) {
                     result[t] = {};
@@ -78,7 +78,7 @@ export default class Analytics
                         }
                     }
                 }
-            }
+            });
 
         return result;
     }

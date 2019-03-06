@@ -4,6 +4,7 @@ import Component from './components';
 import fetch from 'unfetch';
 import _merge from 'lodash/merge';
 import store from 'store2';
+import isEmpty from 'lodash/isEmpty';
 
 import 'formiojs/dist/formio.form.min.css';
 
@@ -115,6 +116,10 @@ class Form {
         }};
     }
 
+    get gaTrackerData() {
+        return this.form.instance.data.ga || null;
+    }
+
     /**
      * Embed the form on the actual page
      * @param formJson
@@ -145,6 +150,10 @@ class Form {
             })
             
             formInstance.on('next', (payload) => {
+                if (isEmpty(this.gaTrackerData)) {
+                    this.gaTrackerData = analytics.trackerData();
+                }
+
                 analytics.pageProgressionEvent(formInstance);
                 jornaya.attachJornayaIdToTCPA();
                 history.pageProgression().updateState();

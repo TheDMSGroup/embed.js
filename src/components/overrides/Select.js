@@ -627,7 +627,7 @@ export default class SubmitSelectComponent extends BaseComponent {
             searchPlaceholderValue: this.t('Type to search'),
             position: (this.component.dropdown || 'auto'),
             searchEnabled: useSearch,
-            shouldSort: customOptions.shouldSort || false,
+            shouldSort: (customOptions.shouldSort || false),
             searchChoices: !this.component.searchField,
             searchFields: _.get(this, 'component.searchFields', ['label']),
             fuseOptions: Object.assign({
@@ -713,7 +713,6 @@ export default class SubmitSelectComponent extends BaseComponent {
             const inputTypes = ['checkbox', 'phoneNumber', 'textfield', 'textarea', 'datetime', 'number', 'email', 'select', 'selectboxes', 'signature', 'time', 'file', 'day', 'address', 'password', 'radio', 'currency'];
             const myId = this.id;
             let lastInputIndex = null, myIndex = null;
-            console.log(this);
             for (let xIndex in this.parent.components) {
                 if (inputTypes.includes(this.parent.components[xIndex].type)) lastInputIndex = xIndex;
                 if (myId == this.parent.components[xIndex].id) myIndex = xIndex;
