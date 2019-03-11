@@ -129,15 +129,18 @@ class Form {
         const formInstance = this.form.instance;
         formInstance.form = formJson;
 
-        const history = new Component.history(formInstance);
-        history.initialize();
-
         const analytics = new Component.analytics();
         const jornaya = new Component.jornaya(formInstance);
 
-        formInstance.submission = {
-            data: _merge(history.storeFormData, this.form.payload)
-        };
+        const history = new Component.history(formInstance);
+
+        if (!this.checkConfigSwitch('ignoreHistory')) {
+            history.initialize();
+
+            formInstance.submission = {
+                data: _merge(history.storeFormData, this.form.payload)
+            };
+        }
 
         formInstance.ready.then(() => {
             formInstance.on('formLoad', () => {
@@ -147,8 +150,8 @@ class Form {
 
             formInstance.on('render', () => {
                 jornaya.attachJornayaIdToTCPA();
-            })
-            
+            });
+
             formInstance.on('next', (payload) => {
                 if (isEmpty(this.gaTrackerData)) {
                     this.gaTrackerData = analytics.trackerData();
@@ -156,14 +159,22 @@ class Form {
 
                 analytics.pageProgressionEvent(formInstance);
                 jornaya.attachJornayaIdToTCPA();
-                history.pageProgression().updateState();
+
+                if (!this.checkConfigSwitch('ignoreHistory')) {
+                    history.pageProgression().updateState();
+                }
+
                 this.submitLeadData(payload.data, this.leadApiEndPoint);
             });
 
             formInstance.on('submitDone', (payload) => {
                 analytics.formCompletionEvent(formInstance);
                 jornaya.attachJornayaIdToTCPA();
-                history.updateState();
+
+                if (!this.checkConfigSwitch('ignoreHistory')) {
+                    history.updateState();
+                }
+
                 this.submitLeadData(payload.data, this.leadApiEndPoint)
                 .then((response) => this.handleRedirect(response));
             });
@@ -333,7 +344,7 @@ class Form {
     triggerFieldEvent()
     {
         let form = this.form.instance;
-    
+
         return new Promise(resolve => {
             FormioUtils.eachComponent(form.components, (component) => {
                 if (component.key && component.key.includes('phone') && !component.key.includes('consent')) {
@@ -347,6 +358,11 @@ class Form {
             });
             resolve();
         });
+    }
+
+    checkConfigSwitch(name)
+    {
+        return (this.form.config.hasOwnProperty(name) && this.form.config[name]);
     }
 }
 export default Form;
