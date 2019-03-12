@@ -1,4 +1,5 @@
 import BaseComponent from 'formiojs/components/base/Base';
+import isNumber from 'lodash/isNumber';
 
 export default class SliderComponent extends BaseComponent {
     static schema(...extend) {
@@ -35,7 +36,7 @@ export default class SliderComponent extends BaseComponent {
         info.attr.min = this.component.min;
         info.attr.max = this.component.max;
         info.attr.step = this.component.step;
-        info.attr.value = Number(this.defaultValue) || (Number(this.component.max) + Number(this.component.min)) / 2;
+        info.attr.value = isNumber(this.defaultValue) ? this.defaultValue : (Number(this.component.max) + Number(this.component.min)) / 2;
         return info;
     }
 
@@ -77,6 +78,7 @@ export default class SliderComponent extends BaseComponent {
         this.hasError = false;
         this.createElement();
         let output = this.ce('div', { class: 'slider-output display-4 text-center' });
+        let labelContainer = this.ce('div', { class: 'mb-4' })
         let minLabel = this.ce('div', { class: 'float-left' });
         let maxLabel = this.ce('div', { class: 'float-right' });
         this.createLabel(this.element);
@@ -85,8 +87,10 @@ export default class SliderComponent extends BaseComponent {
 
         maxLabel.innerHTML = this.determineFormat(this.component.max);
         minLabel.innerHTML = this.determineFormat(this.component.min);
-        this.element.appendChild(minLabel);
-        this.element.appendChild(maxLabel);
+        labelContainer.appendChild(minLabel);
+        labelContainer.appendChild(maxLabel);
+
+        this.element.appendChild(labelContainer);
 
         output.innerHTML = this.getOutputText();
 
@@ -97,7 +101,11 @@ export default class SliderComponent extends BaseComponent {
     }
 
     getOutputText() {
-        return `${this.determineFormat(this.sliderElement.value - this.component.step)} - ${this.determineFormat(this.sliderElement.value)}`;
+        if (Number(this.sliderElement.value) === 0) {
+            return `${this.determineFormat(this.sliderElement.value)}`;
+        } else {
+            return `${this.determineFormat(this.sliderElement.value - this.component.step)} - ${this.determineFormat(this.sliderElement.value)}`;
+        }
     }
 
     determineFormat(value) {

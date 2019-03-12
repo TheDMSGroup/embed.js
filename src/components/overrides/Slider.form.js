@@ -53,6 +53,13 @@ export default function(...extend) {
           key: 'step',
           label: 'Step'
         },
+        {
+          weight: 109,
+          type: 'textfield',
+          input: true,
+          key: 'defaultValue',
+          label: 'Default Value'
+        },
       ]
     },
     {
