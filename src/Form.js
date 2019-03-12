@@ -328,7 +328,6 @@ class Form {
      */
     submitLeadData(parameters, path)
     {
-        console.log(parameters);
         return fetch(path, {
             method: 'POST',
             body: JSON.stringify(parameters),
