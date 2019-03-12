@@ -613,7 +613,7 @@ export default class SubmitSelectComponent extends BaseComponent {
 
         const choicesOptions = {
             ...customOptions,
-            removeItemButton: this.component.disabled ? false : _.get(this.component, 'removeItemButton', true),
+            removeItemButton: this.component.disabled ? false : _.get(this.component, 'removeItemButton', false),
             itemSelectText: '',
             classNames: {
                 containerOuter: 'choices form-group formio-choices',
