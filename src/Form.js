@@ -140,6 +140,10 @@ class Form {
             formInstance.submission = {
                 data: _merge(history.storeFormData, this.form.payload)
             };
+        } else {
+            formInstance.submission = {
+                data: this.form.payload
+            }
         }
 
         formInstance.ready.then(() => {
