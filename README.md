@@ -25,6 +25,7 @@ npm install @ivanljutyj/embed.js
 * account - REQUIRED
 * target|form - REQUIRED
 * url - OPTIONAL
+* ignoreHistory - true|false - OPTIONAL
 
 ### Form Builder Embedding
 ```html
