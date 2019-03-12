@@ -13,7 +13,7 @@ export default class Analytics
             eventCompleted: false
         };
 
-        Object.assign(form.data, event);
+        form.data = { ...form.data, ...event };
     }
 
     /**
@@ -28,8 +28,7 @@ export default class Analytics
             eventAction: 'P: ' + this.pad(form.customCurrentPage, 2) + '; T: ' + this.pad(form.pages.length, 2) + ';',
             eventCompleted: true
         };
-
-        Object.assign(form.data, event);
+        form.data = { ...form.data, ...event };
     }
 
     /**

@@ -168,7 +168,7 @@ class Form {
                     history.pageProgression().updateState();
                 }
 
-                this.submitLeadData(payload.data, this.leadApiEndPoint);
+                this.submitLeadData(formInstance.data, this.leadApiEndPoint);
             });
 
             formInstance.on('submitDone', (payload) => {
@@ -179,7 +179,7 @@ class Form {
                     history.updateState();
                 }
 
-                this.submitLeadData(payload.data, this.leadApiEndPoint)
+                this.submitLeadData(formInstance.data, this.leadApiEndPoint)
                 .then((response) => this.handleRedirect(response));
             });
 
@@ -328,6 +328,7 @@ class Form {
      */
     submitLeadData(parameters, path)
     {
+        console.log(parameters);
         return fetch(path, {
             method: 'POST',
             body: JSON.stringify(parameters),
