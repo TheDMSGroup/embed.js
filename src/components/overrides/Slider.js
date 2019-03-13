@@ -36,7 +36,7 @@ export default class SliderComponent extends BaseComponent {
         info.attr.min = this.component.min;
         info.attr.max = this.component.max;
         info.attr.step = this.component.step;
-        info.attr.value = isNumber(this.defaultValue) ? this.defaultValue : (Number(this.component.max) + Number(this.component.min)) / 2;
+        info.attr.value = (Number(this.defaultValue) || Number(this.defaultValue) === 0) ? Number(this.defaultValue) : (Number(this.component.max) + Number(this.component.min)) / 2;
         return info;
     }
 
