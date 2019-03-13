@@ -16,7 +16,7 @@ export default class Builder {
     render() {
         return this.dictionary.get()
         .then(dictionary => {
-            Formio.icons = 'fontawesone';
+            Formio.icons = 'fontawesome';
             this.builder = new FormBuilder(document.getElementById('studio'), this.json, dictionary);
             return this.builder.render()
             .then(builder => {
@@ -57,7 +57,7 @@ export default class Builder {
         }
     }
 
-    createSearchBox() {    
+    createSearchBox() {
         let questions = this.components.questions.panel.firstChild;
         let search = document.createElement('input');
         search.type = 'text';
@@ -103,7 +103,7 @@ export default class Builder {
             this.componentPreview.innerHTML = '';
             this.componentPreview.appendChild(this.preview.getElement());
         }
-  
+
         // Ensure this component has a key.
         if (component.isNew) {
             if (!component.keyModified && !component.component.lockKey) {
@@ -114,7 +114,7 @@ export default class Builder {
                 );
             }
         }
-  
+
         // Change the "default value" field to be reflective of this component.
         if (this.defaultValueComponent) {
             _.assign(this.defaultValueComponent, _.omit(component.component, [
@@ -126,7 +126,7 @@ export default class Builder {
                 'disabled'
             ]));
         }
-  
+
         // Called when we update a component.
         this.emit('updateComponent', component);
     };
