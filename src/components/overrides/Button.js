@@ -66,6 +66,8 @@ export default class CustomButtonComponent extends BaseComponent {
         document.addEventListener('keydown', (event) => {
             const key = event.keyCode || event.which;
             if (key === 13) {
+                event.preventDefault();
+                event.stopPropagation();
                 this.buttonElement.click();
             }
         });
