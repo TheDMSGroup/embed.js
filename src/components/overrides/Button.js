@@ -62,6 +62,14 @@ export default class CustomButtonComponent extends BaseComponent {
     }
 
     build() {
+
+        document.addEventListener('keydown', (event) => {
+            const key = event.keyCode || event.which;
+            if (key === 13) {
+                this.buttonElement.click();
+            }
+        });
+
         if (this.viewOnly || this.options.hideButtons) {
             this.component.hidden = true;
         }
@@ -264,22 +272,6 @@ export default class CustomButtonComponent extends BaseComponent {
 
         this.autofocus();
         this.attachLogic();
-    }
-
-    addInputSubmitListener(input) {
-        if (!this.options.submitOnEnter) {
-            return;
-        }
-        this.addEventListener(input, 'keypress', (event) => {
-            const key = event.keyCode || event.which;
-            if (key === 13) {
-                event.preventDefault();
-                event.stopPropagation();
-                this.emit('nextButton', {
-                    data: this.data
-                });
-            }
-        });
     }
 
     setValue(value, flags) {
