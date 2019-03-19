@@ -36,27 +36,3 @@
 <script>crm.embed({ account: "DMS", form: "155", url: "https://studio.dmsengage.com", ignoreHistory: true });</script>
 
 </html>
-<!-- "validate":{"required":true,"custom":"valid = (parseInt(input) > 0) ? true : \"You must have a credit card debt above $0 to benefit from this program.\";"} -->
-<!-- function(){
-    try {
-        if (typeof window.sessionStorage !== 'undefined') {
-            var params = window.sessionStorage.getItem('crm.session_params');
-            if (params) {
-                var urlParam = new URLSearchParams(params);
-                var param = urlParam.get('utm_source');
-                if (param) {
-                    return param;
-                }
-            }
-        }
-        if (typeof window.localStorage !== 'undefined') {
-            var formSession = window.localStorage.getItem('crm.form_session');
-            if (typeof formSession === 'string') {
-                formSession = JSON.parse(formSession);
-                if (formSession.hasOwnProperty('data') && formSession.data.hasOwnProperty('utm_source') && formSession.data.utm_source) {
-                    return formSession.data.utm_source
-                }
-            }
-        }
-    } catch(err) {}
-} -->
