@@ -188,14 +188,12 @@ class Form {
     }
 
     handleRedirect(form) {
-        if (form.use_html_redirect) {
+        if (form.hasOwnProperty('use_html_redirect') && form.use_html_redirect) {
             let embedElement = document.getElementById('studio');
             embedElement.innerHTML = form.html || "Thank you for your submission.";
-        } else if (form.redirect_url) {
+        } else if (form.hasOwnProperty('redirect_url') && form.redirect_url) {
             location.href = form.redirect_url;
         }
-
-        store.clearAll();
     }
 
     /**
