@@ -32,3 +32,9 @@ npm install @ivanljutyj/embed.js
     <script src="dist/embed.js"></script>
     <script>crm.build();</script>
 ```
+
+### Development/Commit Process
+* Make Code Changes
+* `npm run build`
+* Update package version in `package.json`
+* commit your code changes, `./dist/*`, and `package.json`
