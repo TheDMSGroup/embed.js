@@ -61,3 +61,9 @@ typings/
 .next
 
 .idea
+
+dist/*.eot
+dist/*.svg
+dist/*.ttf
+
+.vscode
