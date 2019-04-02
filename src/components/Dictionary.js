@@ -168,12 +168,15 @@ export default class Dictionary {
                             "input": true
                         }
                     },
+                    "carYear": true,
+                    "carMake": true,
+                    "carModel": true,
                     "htmlelement": true,
                     "button": true,
                     "hidden": true,
                     "select": true,
                     "selectboxes": true,
-                    "slider": true
+                    "slider": true,
                 }
             }
         }
