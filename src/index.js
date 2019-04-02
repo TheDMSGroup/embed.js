@@ -1,3 +1,4 @@
+import './polyfills/weakmap';
 import Embed from './Embed';
 import Builder from './Builder';
 
