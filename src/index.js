@@ -1,3 +1,5 @@
+import 'es6-weak-map/implement';
+
 import Embed from './Embed';
 import Builder from './Builder';
 

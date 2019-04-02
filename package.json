@@ -6,6 +6,7 @@
   "dependencies": {
     "currentscript": "^1.1.1",
     "dom-previous-element-sibling": "^1.0.0",
+    "es6-weak-map": "^2.0.2",
     "formiojs": "^3.17.2",
     "get-js": "0.0.5",
     "history": "^4.9.0",
