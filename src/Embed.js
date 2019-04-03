@@ -59,7 +59,6 @@ class Embed
     getTargetNode(script) {
 
         if (script) {
-
             return script.parentNode;
         } else {
 
@@ -88,7 +87,7 @@ class Embed
      */
     getApiDomain(script)
     {
-        return this.url || (script ? this.getScriptSource(script.previousSibling) : this.defaultDomain);
+        return this.url || (script ? this.getScriptSource(script.previousElementSibling) : this.defaultDomain);
     }
 
     /**
