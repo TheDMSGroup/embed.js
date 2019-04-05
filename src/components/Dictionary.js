@@ -172,6 +172,7 @@ export default class Dictionary {
                     "button": true,
                     "hidden": true,
                     "select": true,
+                    "nativeSelect": true,
                     "selectboxes": true,
                     "slider": true
                 }
