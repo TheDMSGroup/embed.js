@@ -300,7 +300,9 @@ export default class NativeSelectComponent extends BaseComponent {
             this.addValueOptions(items);
         }
 
-        if (this.component.widget === 'html5' && !this.component.placeholder) {
+        this.selectInput.className = 'custom-select custom-select-lg';
+
+        if (!this.component.placeholder) {
             this.addOption(null, '');
         }
         
@@ -607,7 +609,7 @@ export default class NativeSelectComponent extends BaseComponent {
         });
 
         this.addEventListener(input, 'change', () => {
-            const inputTypes = ['checkbox', 'phoneNumber', 'textfield', 'textarea', 'datetime', 'number', 'email', 'select', 'selectboxes', 'signature', 'time', 'file', 'day', 'address', 'password', 'radio', 'currency'];
+            const inputTypes = ['checkbox', 'phoneNumber', 'textfield', 'textarea', 'datetime', 'number', 'email', 'select', 'nativeSelect', 'selectboxes', 'signature', 'time', 'file', 'day', 'address', 'password', 'radio', 'currency'];
             const myId = this.id;
             let lastInputIndex = null, myIndex = null;
             for (let xIndex in this.parent.components) {
