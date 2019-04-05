@@ -584,6 +584,19 @@ export default class SubmitSelectComponent extends BaseComponent {
             input.setAttribute('multiple', true);
         }
 
+        this.addEventListener(input, 'change', () => {
+            const inputTypes = ['checkbox', 'phoneNumber', 'textfield', 'textarea', 'datetime', 'number', 'email', 'select', 'selectboxes', 'signature', 'time', 'file', 'day', 'address', 'password', 'radio', 'currency'];
+            const myId = this.id;
+            let lastInputIndex = null, myIndex = null;
+            for (let xIndex in this.parent.components) {
+                if (inputTypes.includes(this.parent.components[xIndex].type)) lastInputIndex = xIndex;
+                if (myId == this.parent.components[xIndex].id) myIndex = xIndex;
+            }
+            if (myIndex == (this.parent.components.length - 1) || myIndex == lastInputIndex) {
+                this.emit('nextButton', { data: this.data });
+            }
+        });
+
         if (this.component.widget === 'html5') {
             this.triggerUpdate();
             this.focusableElement = input;
@@ -708,19 +721,6 @@ export default class SubmitSelectComponent extends BaseComponent {
         // Force the disabled state with getters and setters.
         this.disabled = this.disabled;
         this.triggerUpdate();
-
-        this.addEventListener(input, 'change', () => {
-            const inputTypes = ['checkbox', 'phoneNumber', 'textfield', 'textarea', 'datetime', 'number', 'email', 'select', 'selectboxes', 'signature', 'time', 'file', 'day', 'address', 'password', 'radio', 'currency'];
-            const myId = this.id;
-            let lastInputIndex = null, myIndex = null;
-            for (let xIndex in this.parent.components) {
-                if (inputTypes.includes(this.parent.components[xIndex].type)) lastInputIndex = xIndex;
-                if (myId == this.parent.components[xIndex].id) myIndex = xIndex;
-            }
-            if (myIndex == (this.parent.components.length - 1) || myIndex == lastInputIndex) {
-                this.emit('nextButton', { data: this.data });
-            }
-        });
     }
 
     /* eslint-enable max-statements */
