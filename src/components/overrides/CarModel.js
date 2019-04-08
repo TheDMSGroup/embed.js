@@ -7,6 +7,7 @@ export default class CarModelComponent extends SelectComponent {
             label: 'Car Model',
             key: 'car_model',
             lockKey: true,
+            placeholder: 'Select Model',
             data: {
                 values: [],
                 json: '',
@@ -22,6 +23,9 @@ export default class CarModelComponent extends SelectComponent {
             searchEnabled: false,
             searchField: '',
             minSearch: 0,
+            disableLimit: true,
+            refreshOn: 'car_make',
+            clearOnRefresh: true,
             readOnlyValue: false,
             authenticate: false,
             template: '<span>{{ item.name }}</span>',

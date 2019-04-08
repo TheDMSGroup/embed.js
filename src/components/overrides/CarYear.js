@@ -15,6 +15,7 @@ export default class CarYearComponent extends SelectComponent {
                 custom: ''
             },
             limit: 100,
+            placeholder: 'Select Year',
             dataSrc: 'values',
             valueProperty: '',
             selectValues: '',
@@ -28,7 +29,7 @@ export default class CarYearComponent extends SelectComponent {
             selectFields: '',
             searchThreshold: 0.3,
             fuseOptions: {},
-            customOptions: { shouldSort: true },
+            customOptions: {},
 
         }, ...extend);
     }
