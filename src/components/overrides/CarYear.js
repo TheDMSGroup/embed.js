@@ -16,6 +16,7 @@ export default class CarYearComponent extends SelectComponent {
             },
             limit: 100,
             placeholder: 'Select Year',
+            validate: { required: true },
             dataSrc: 'values',
             valueProperty: '',
             selectValues: '',

@@ -26,6 +26,7 @@ export default class CarModelComponent extends SelectComponent {
             disableLimit: true,
             refreshOn: 'car_make',
             clearOnRefresh: true,
+            validate: { required: true },
             readOnlyValue: false,
             authenticate: false,
             template: '<span>{{ item.name }}</span>',

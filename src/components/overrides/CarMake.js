@@ -22,6 +22,7 @@ export default class CarMakeComponent extends SelectComponent {
             refreshOn: 'car_year',
             selectValues: 'data',
             clearOnRefresh: true,
+            validate: { required: true },
             filter: '',
             searchEnabled: false,
             searchField: '',
