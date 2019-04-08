@@ -1,13 +1,13 @@
 {
   "name": "@ivanljutyj/embed.js",
-  "version": "1.4.8",
+  "version": "1.5.0",
   "description": "Embed implementation for the Studio CRM product",
   "main": "dist/embed.js",
   "dependencies": {
     "currentscript": "^1.1.1",
     "dom-previous-element-sibling": "^1.0.0",
     "es6-weak-map": "^2.0.2",
-    "formiojs": "^3.17.2",
+    "formiojs": "^3.19.3",
     "get-js": "0.0.5",
     "history": "^4.9.0",
     "query-string": "^5.1.1",
@@ -16,8 +16,8 @@
     "url-polyfill": "^1.1.5"
   },
   "devDependencies": {
-    "@babel/core": "^7.3.4",
-    "@babel/preset-env": "^7.3.4",
+    "@babel/core": "^7.4.3",
+    "@babel/preset-env": "^7.4.3",
     "babel-loader": "^8.0.5",
     "babel-plugin-add-module-exports": "^1.0.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
