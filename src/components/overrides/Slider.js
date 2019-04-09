@@ -102,7 +102,7 @@ export default class SliderComponent extends BaseComponent {
 
     getOutputText() {
 
-        if (Number(this.dataValue) !== this.sliderElement.value) {
+        if (Number(this.dataValue) !== Number(this.sliderElement.value)) {
             this.sliderElement.value = this.dataValue;
         }
 
