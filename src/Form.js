@@ -5,8 +5,11 @@ import fetch from 'unfetch';
 import _merge from 'lodash/merge';
 import store from 'store2';
 import isEmpty from 'lodash/isEmpty';
+import forEach from 'lodash/forEach';
+import FormioUtils from "formiojs/utils";
 
 import 'formiojs/dist/formio.form.min.css';
+import 'csshake/dist/csshake.min.css';
 
 class Form {
     /**
@@ -184,6 +187,18 @@ class Form {
             });
 
             formInstance.on('nextButton', (payload) => this.triggerFieldEvent().then(() => this.nextPage(payload)));
+
+            formInstance.on('error', (errors) => {
+                forEach(errors, (value, key) => {
+                    if (value.hasOwnProperty('component') && value.component.hasOwnProperty('key')) {
+                        let component = FormioUtils.getComponent(formInstance.components, value.component.key);
+                        if (component && component.hasOwnProperty('element')) {
+                            component.element.classList.add('shake', 'shake-horizontal', 'shake-constant');
+                            setTimeout(() => component.element.classList.remove('shake', 'shake-horizontal', 'shake-constant'), 250);
+                        }
+                    }
+                });
+            });
         });
     }
 

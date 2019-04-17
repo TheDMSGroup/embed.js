@@ -4,6 +4,7 @@
   "description": "Embed implementation for the Studio CRM product",
   "main": "dist/embed.js",
   "dependencies": {
+    "csshake": "^1.5.3",
     "currentscript": "^1.1.1",
     "dom-previous-element-sibling": "^1.0.0",
     "es6-weak-map": "^2.0.2",
