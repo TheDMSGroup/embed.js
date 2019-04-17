@@ -101,6 +101,11 @@ export default class SliderComponent extends BaseComponent {
     }
 
     getOutputText() {
+
+        if (Number(this.dataValue) !== Number(this.sliderElement.value)) {
+            this.sliderElement.value = this.dataValue;
+        }
+
         if (Number(this.sliderElement.value) === 0) {
             return `${this.determineFormat(this.sliderElement.value)}`;
         } else {
