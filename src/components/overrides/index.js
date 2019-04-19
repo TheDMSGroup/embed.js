@@ -5,12 +5,14 @@ import CustomButtonComponent from "./Button";
 import ButtonForm from 'formiojs/components/button/Button.form';
 import SliderForm from './Slider.form';
 import SelectForm from 'formiojs/components/select/Select.form';
+import FieldsetForm from 'formiojs/components/fieldset/Fieldset.form';
 import CustomCheckboxComponent from './Checkbox';
 import SubmitSelectComponent from './Select';
 import CustomSliderComponent from './Slider';
 import CustomCarModelComponent from './CarModel';
 import CustomCarMakeComponent from './CarMake';
 import CustomCarYearComponent from './CarYear';
+import CustomGroupComponet from './Group';
 
 const init = () => {
     AllComponents.button = CustomButtonComponent;
@@ -26,6 +28,8 @@ const init = () => {
     AllComponents.carMake.editForm = SelectForm;
     AllComponents.carYear = CustomCarYearComponent;
     AllComponents.carYear.editForm = SelectForm;
+    AllComponents.group = CustomGroupComponet;
+    AllComponents.group.editForm = FieldsetForm;
     
     Components.setComponents(AllComponents);
 };

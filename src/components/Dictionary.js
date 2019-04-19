@@ -177,6 +177,7 @@ export default class Dictionary {
                     "select": true,
                     "selectboxes": true,
                     "slider": true,
+                    "group": true
                 }
             }
         }
