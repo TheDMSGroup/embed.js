@@ -53,40 +53,27 @@ export default class GroupComponent extends NestedComponent {
             class: 'card-body'
         });
 
-        console.log(this.component);
-
         if (this.component.hasOwnProperty('data') && this.component.data.hasOwnProperty('values')) {
-            for (let itemIndex in this.component.data.values) {
-                this.addComponent({
-                    'label': this.component.data.values[itemIndex]['label'],
-                    'value': this.component.data.values[itemIndex]['value'],
-                    'type': 'button',
-                    'customClass': this.component.customClasses,
-                    //'customClass': 'btn btn-sm btn-info btn-margin-right',
-                    'name': 'button[]',
-                    'key': this.component.key,
-                    'input': true,
-                }, this.element, null, null, false, state);
-            }
+            this.addValueButtons(this.element, state);
         }
-
-        /*this.addComponent({
-            label: "Test 1",
-            type: 'textfield',
-            key: 'lastName',
-            input: true
-        }, this.element, null, null, false, state);
-
-        this.addComponent({
-            label: "Test 2",
-            type: 'textfield',
-            key: 'lastName',
-            input: true
-        }, this.element, null, null, false, state);*/
 
         this.element.appendChild(this.body);
 
         this.setCollapsed();
         this.attachLogic();
+    }
+
+    addValueButtons(element, state)
+    {
+        for (let itemIndex in this.component.data.values) {
+            this.addComponent({
+                'label': this.component.data.values[itemIndex]['label'],
+                'value': this.component.data.values[itemIndex]['value'],
+                'type': 'button',
+                'customClass': this.component.customClasses,
+                'key': this.component.key,
+                'input': true,
+            }, element, null, null, false, state);
+        }
     }
 }
