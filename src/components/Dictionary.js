@@ -31,11 +31,11 @@ export default class Dictionary {
                 let type = dictionaryData[dictionaryField].type;
                 let properties = JSON.parse(dictionaryData[dictionaryField].properties);
                 let labelCleaned = this.toTitleCase(this.removeCategoryFrom(label));
-                
-                customComponents[key] = { 
-                    schema: { 
-                        data: {} 
-                    }    
+
+                customComponents[key] = {
+                    schema: {
+                        data: {}
+                    }
                 };
 
                 if (this.determineType(type) === 'select') {
@@ -54,7 +54,7 @@ export default class Dictionary {
                         dataSrc: "values"
                     };
                 }
-                
+
                 customCategories['questions'].components.push(
                     customComponents[key] = {
                         title: labelCleaned,
@@ -177,7 +177,7 @@ export default class Dictionary {
                     "select": true,
                     "selectboxes": true,
                     "slider": true,
-                    "group": true
+                    "selectbuttons": true,
                 }
             }
         }

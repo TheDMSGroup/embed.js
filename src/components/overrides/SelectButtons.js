@@ -3,9 +3,9 @@ import NestedComponent from 'formiojs/components/nested/NestedComponent';
 export default class GroupComponent extends NestedComponent {
     static schema(...extend) {
         return NestedComponent.schema({
-            label: 'Group',
-            key: 'group',
-            type: 'group',
+            label: 'Select Buttons',
+            key: 'selectbuttons',
+            type: 'selectbuttons',
             legend: '',
             components: [],
             input: false,
@@ -15,7 +15,7 @@ export default class GroupComponent extends NestedComponent {
 
     static get builderInfo() {
         return {
-            title: 'Group',
+            title: 'Select Buttons',
             icon: 'fa fa-th-large',
             group: 'layout',
             documentation: 'http://help.form.io/userguide/#fieldset',
@@ -41,6 +41,7 @@ export default class GroupComponent extends NestedComponent {
             id: this.id,
             class: this.className
         });
+
         if (this.component.legend) {
             const legend = this.ce('legend');
             legend.appendChild(this.text(this.component.legend));
@@ -52,7 +53,24 @@ export default class GroupComponent extends NestedComponent {
             class: 'card-body'
         });
 
-        this.addComponent({
+        console.log(this.component);
+
+        if (this.component.hasOwnProperty('data') && this.component.data.hasOwnProperty('values')) {
+            for (let itemIndex in this.component.data.values) {
+                this.addComponent({
+                    'label': this.component.data.values[itemIndex]['label'],
+                    'value': this.component.data.values[itemIndex]['value'],
+                    'type': 'button',
+                    'customClass': this.component.customClasses,
+                    //'customClass': 'btn btn-sm btn-info btn-margin-right',
+                    'name': 'button[]',
+                    'key': this.component.key,
+                    'input': true,
+                }, this.element, null, null, false, state);
+            }
+        }
+
+        /*this.addComponent({
             label: "Test 1",
             type: 'textfield',
             key: 'lastName',
@@ -64,7 +82,7 @@ export default class GroupComponent extends NestedComponent {
             type: 'textfield',
             key: 'lastName',
             input: true
-        }, this.element, null, null, false, state);
+        }, this.element, null, null, false, state);*/
 
         this.element.appendChild(this.body);
 

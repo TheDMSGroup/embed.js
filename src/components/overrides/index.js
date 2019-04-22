@@ -13,6 +13,8 @@ import CustomCarModelComponent from './CarModel';
 import CustomCarMakeComponent from './CarMake';
 import CustomCarYearComponent from './CarYear';
 import CustomGroupComponet from './Group';
+import SelectButtons from './SelectButtons';
+import SelectButtonsForm from './SelectButtons.form';
 
 const init = () => {
     AllComponents.button = CustomButtonComponent;
@@ -30,7 +32,8 @@ const init = () => {
     AllComponents.carYear.editForm = SelectForm;
     AllComponents.group = CustomGroupComponet;
     AllComponents.group.editForm = FieldsetForm;
-    
+    AllComponents.selectbuttons = SelectButtons;
+    AllComponents.selectbuttons.editForm = SelectButtonsForm;
     Components.setComponents(AllComponents);
 };
 
