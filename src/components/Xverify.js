@@ -4,6 +4,8 @@ import fetch from 'unfetch'
 
 class Xverify
 {
+    phoneField = '';
+
     constructor(form)
     {
         this.form = form;
@@ -27,7 +29,7 @@ class Xverify
 
     needsToBeValidated(payload)
     {
-        if (payload.hasOwnProperty('phone') && !payload.hasOwnProperty('phone_valid')) {
+        if (this.findPhone(payload) && !payload.hasOwnProperty(this.phoneField + '_valid')) {
             return true;
         }
 
@@ -38,6 +40,22 @@ class Xverify
         return false;
     }
 
+    /**
+     * Find the phone number in the payload
+     *
+     * @param payload
+     */
+    findPhone(payload)
+    {
+         return Object.keys(payload)
+            .filter(field => field.includes('phone') && !field.includes('consent') && !field.includes('valid'))
+            .reduce((obj, key) => {
+                this.phoneField = key;
+                obj[key] = payload[key];
+                return obj;
+            }, {});
+    }
+
     validate(payload)
     {
         let xverifyPayload = {};
@@ -46,19 +64,21 @@ class Xverify
             xverifyPayload['email'] = payload.email;
         }
         if (this.extractFormSetting('verify_phone') === null) {
-            xverifyPayload['phone'] = payload.phone;
+            xverifyPayload['phone'] = Object.values(this.findPhone(payload)).toString();
         }
 
         if (this.extractFormSetting('verify_email') && payload.hasOwnProperty('email')) {
             xverifyPayload['email'] = payload.email;
         }
-        if (this.extractFormSetting('verify_phone') && payload.hasOwnProperty('phone')) {
-            xverifyPayload['phone'] = payload.phone;
+        if (this.extractFormSetting('verify_phone') && this.findPhone(payload)) {
+            xverifyPayload['phone'] = Object.values(this.findPhone(payload)).toString();
+            // Support legacy phone_cell field
+            xverifyPayload['phone_cell'] = Object.values(this.findPhone(payload)).toString();
         }
 
         return fetch(this.xverifyApiEndpoint, {
             method: 'POST',
-            body: JSON.stringify(Object.assign(xverifyPayload, this.form.payload)),
+            body: JSON.stringify({...xverifyPayload, ...this.form.payload}),
             headers: {
                 'Content-Type': 'text/plain; charset=utf-8'
             }
@@ -66,16 +86,16 @@ class Xverify
         .then((response) => response.json())
         .then((results) => {
             let errors = [];
-            forEach(results, (fieldResult, fieldKey) => {
+            forEach(results, (fieldResult) => {
                if (!fieldResult.valid) {
                    FormioUtils.getComponent(
                        this.form.instance.components,
-                       fieldKey
+                       this.phoneField
                    ).setCustomValidity(fieldResult.message, true);
 
                    errors.push(fieldResult.message);
                } else {
-                   payload[fieldKey + '_valid'] = true;
+                   payload[this.phoneField + '_valid'] = true;
                }
             });
             if (errors.length > 0) {
