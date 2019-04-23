@@ -57,7 +57,7 @@ export default class SliderComponent extends BaseComponent {
             this.addClass(container, 'formio-component-label-hidden');
             className += ' control-label--hidden';
         }
-    
+
         if (this.hasInput && this.component.validate && this.component.validate.required) {
         className += ' field-required';
         }
@@ -98,13 +98,13 @@ export default class SliderComponent extends BaseComponent {
             output.innerHTML = this.getOutputText();
         };
 
+        setTimeout(() => {
+            this.sliderElement.oninput();
+        }, 1);
+
     }
 
     getOutputText() {
-
-        if (Number(this.dataValue) !== Number(this.sliderElement.value)) {
-            this.sliderElement.value = this.dataValue;
-        }
 
         if (Number(this.sliderElement.value) === 0) {
             return `${this.determineFormat(this.sliderElement.value)}`;
@@ -116,7 +116,7 @@ export default class SliderComponent extends BaseComponent {
     determineFormat(value) {
 
         switch (this.component.sliderType) {
-            case 'number': 
+            case 'number':
                 return Number(value).toLocaleString('en-US');
             case 'currency':
                 return Number(value).toLocaleString('en-US', { style: 'currency', currency: 'USD' }).split('.')[0];
