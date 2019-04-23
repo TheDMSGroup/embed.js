@@ -100,7 +100,7 @@ export default class SliderComponent extends BaseComponent {
 
         setTimeout(() => {
             this.sliderElement.oninput();
-        }, 10);
+        }, 1);
 
     }
 
