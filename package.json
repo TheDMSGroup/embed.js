@@ -1,6 +1,6 @@
 {
   "name": "@ivanljutyj/embed.js",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "description": "Embed implementation for the Studio CRM product",
   "main": "dist/embed.js",
   "dependencies": {
