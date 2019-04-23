@@ -37,6 +37,7 @@ export default class GroupComponent extends NestedComponent {
     }
 
     build(state) {
+        this.component.dataSrc = 'values';
         this.element = this.ce('fieldset', {
             id: this.id,
             class: this.className
