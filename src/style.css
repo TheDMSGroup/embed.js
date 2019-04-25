@@ -80,3 +80,7 @@
 #studio .col.drag-container {
     margin: -1px;
 }
+
+.btn-margin-right {
+    margin-right: .5em;
+}
