@@ -141,7 +141,7 @@ class Form {
             history.initialize();
 
             formInstance.submission = {
-                data: _merge(history.storeFormData, this.form.payload)
+                data: _merge(history.storeFormData, this.form.payload, this.sessionParams)
             };
         } else {
             formInstance.submission = {
@@ -153,6 +153,7 @@ class Form {
             formInstance.on('formLoad', () => {
                 this.gaTrackerData = analytics.trackerData();
                 formInstance.customCurrentPage = formInstance.page;
+                history.updateState();
             });
 
             formInstance.on('render', () => {
@@ -391,5 +392,24 @@ class Form {
     {
         return (this.form.config.hasOwnProperty(name) && this.form.config[name]);
     }
+
+    /**
+     * Get crm.session_params data that gets set by prep.js and parse it into an object
+     * 
+     * @returns {Object}|null
+     */
+    get sessionParams() 
+    {   
+        let params = store.session.get('crm.session_params') || null;
+
+        if (params) {
+            return JSON.parse('{"' + params.replace(/&/g, '","').replace(/=/g,'":"') + '"}', function(key, value) { 
+                return key === "" ? value : decodeURIComponent(value) 
+            });
+        }
+
+        return params;
+    }
+    
 }
 export default Form;
